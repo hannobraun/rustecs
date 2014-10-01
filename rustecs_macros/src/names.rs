@@ -11,7 +11,7 @@ pub fn camel_to_snake_case(ident: ast::Ident) -> String {
 			snake_case.push_str("_");
 		}
 
-		snake_case.push_char(c.to_lowercase().to_char());
+		snake_case.push(c.to_lowercase().to_char());
 	}
 
 	snake_case
@@ -25,7 +25,7 @@ fn pluralize(s: String) -> String {
 	let mut p = s.clone();
 
 	if s.as_slice().ends_with("y") {
-		p.pop_char();
+		p.pop();
 		p.push_str("ies");
 		p
 	}
