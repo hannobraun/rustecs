@@ -16,7 +16,7 @@ pub enum Visual {
 	RenderAsShip,
 }
 
-type Score = u32;
+pub type Score = u32;
 
 
 world!(
