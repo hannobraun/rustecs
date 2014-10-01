@@ -225,13 +225,8 @@ impl Entity {
 		let name = ast::Ident::new(token::intern(name.as_slice()));
 
 		let mut args = Vec::new();
-		for (i, arg) in entity.args.iter().enumerate() {
-			if i + 1 < entity.args.len() {
-				args.push_all(quote_tokens!(&*context, $arg,).as_slice());
-			}
-			else {
-				args.push_all(quote_tokens!(&*context, $arg).as_slice());
-			}
+		for arg in entity.args.iter() {
+			args.push_all(quote_tokens!(&*context, $arg,).as_slice());
 		}
 
 		let mut component_names = Vec::new();
