@@ -20,13 +20,13 @@ pub type Score = u32;
 
 
 world!(
-	Missile(Position, Visual): |x: f64, y: f64| {
+	Missile(Position, Visual): (x: f64, y: f64) {
 		(
 			Position(x, y),
 			RenderAsMissile
 		)
 	}
-	Ship(Position, Visual, Score): |score: u32| {
+	Ship(Position, Visual, Score): (score: u32) {
 		(
 			Position(0.0, 0.0),
 			RenderAsShip,

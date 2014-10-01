@@ -47,8 +47,8 @@ impl Entity {
 		parser.expect(&token::COLON);
 
 		let args = parser.parse_unspanned_seq(
-			&token::BINOP(token::OR),
-			&token::BINOP(token::OR),
+			&token::LPAREN,
+			&token::RPAREN,
 			seq_sep_trailing_disallowed(token::COMMA),
 			|p| p.parse_arg());
 
