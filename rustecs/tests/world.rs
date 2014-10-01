@@ -33,6 +33,13 @@ world!(
 			score
 		)
 	}
+	EntityWithOneComponentNoArgs(Score): () {
+		(
+			// ATTENTION: You need this trailing comma, otherwise the parser
+			// won't recognize this is a tuple.
+			0,
+		)
+	}
 )
 
 
