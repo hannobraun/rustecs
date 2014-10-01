@@ -174,11 +174,9 @@ impl Entity {
 		components        : &HashMap<String, Component>,
 		ordered_components: &Vec<String>
 	) -> Vec<ast::TokenTree> {
-		let name = ast::Ident::new(token::intern(
-			"create_"
-				.to_string()
-				.append(camel_to_snake_case(entity.name).as_slice())
-				.as_slice()));
+		let mut name = "create_".to_string();
+		name.push_str(camel_to_snake_case(entity.name).as_slice());
+		let name = ast::Ident::new(token::intern(name.as_slice()));
 
 		let mut args = Vec::new();
 		for (i, arg) in entity.args.iter().enumerate() {
@@ -233,11 +231,9 @@ impl Entity {
 		components        : &HashMap<String, Component>,
 		ordered_components: &Vec<String>
 	) -> Vec<ast::TokenTree> {
-		let name = ast::Ident::new(token::intern(
-			"import_"
-				.to_string()
-				.append(camel_to_snake_case(entity.name).as_slice())
-				.as_slice()));
+		let mut name = "import_".to_string();
+		name.push_str(camel_to_snake_case(entity.name).as_slice());
+		let name = ast::Ident::new(token::intern(name.as_slice()));
 
 		let mut args = Vec::new();
 		for (i, arg) in entity.args.iter().enumerate() {
