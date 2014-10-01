@@ -55,8 +55,8 @@ fn it_should_create_entities() {
 	assert_eq!(1, world.visuals.len());
 	assert_eq!(0, world.scores.len());
 
-	assert_eq!(&Position(8.0, 12.0), world.positions.get(&missile_id));
-	assert_eq!(&RenderAsMissile    , world.visuals.get(&missile_id));
+	assert_eq!(Position(8.0, 12.0), world.positions[missile_id]);
+	assert_eq!(RenderAsMissile    , world.visuals[missile_id]);
 
 	let ship_id = world.create_ship(100);
 
@@ -64,9 +64,9 @@ fn it_should_create_entities() {
 	assert_eq!(2, world.visuals.len());
 	assert_eq!(1, world.scores.len());
 
-	assert_eq!(&Position(0.0, 0.0), world.positions.get(&ship_id));
-	assert_eq!(&RenderAsShip      , world.visuals.get(&ship_id));
-	assert_eq!(&100               , world.scores.get(&ship_id));
+	assert_eq!(Position(0.0, 0.0), world.positions[ship_id]);
+	assert_eq!(RenderAsShip      , world.visuals[ship_id]);
+	assert_eq!(100               , world.scores[ship_id]);
 }
 
 #[test]
@@ -131,12 +131,12 @@ fn it_should_import_entities() {
 	assert_eq!(2, world.visuals.len());
 	assert_eq!(1, world.scores.len());
 
-	assert_eq!(&Position(8.0, 12.0), world.positions.get(&missile_id));
-	assert_eq!(&RenderAsMissile    , world.visuals.get(&missile_id));
+	assert_eq!(Position(8.0, 12.0), world.positions[missile_id]);
+	assert_eq!(RenderAsMissile    , world.visuals[missile_id]);
 
-	assert_eq!(&Position(0.0, 0.0), world.positions.get(&ship_id));
-	assert_eq!(&RenderAsShip      , world.visuals.get(&ship_id));
-	assert_eq!(&100               , world.scores.get(&ship_id));
+	assert_eq!(Position(0.0, 0.0), world.positions[ship_id]);
+	assert_eq!(RenderAsShip      , world.visuals[ship_id]);
+	assert_eq!(100               , world.scores[ship_id]);
 }
 
 #[test]
@@ -149,8 +149,8 @@ fn it_should_import_single_entities() {
 	assert_eq!(1, world.visuals.len());
 	assert_eq!(0, world.scores.len());
 
-	assert_eq!(&Position(8.0, 12.0), world.positions.get(&5));
-	assert_eq!(&RenderAsMissile    , world.visuals.get(&5));
+	assert_eq!(Position(8.0, 12.0), world.positions[5]);
+	assert_eq!(RenderAsMissile    , world.visuals[5]);
 
 	world.import_ship(7, 100);
 
@@ -158,7 +158,7 @@ fn it_should_import_single_entities() {
 	assert_eq!(2, world.visuals.len());
 	assert_eq!(1, world.scores.len());
 
-	assert_eq!(&Position(0.0, 0.0), world.positions.get(&7));
-	assert_eq!(&RenderAsShip      , world.visuals.get(&7));
-	assert_eq!(&100               , world.scores.get(&7));
+	assert_eq!(Position(0.0, 0.0), world.positions[7]);
+	assert_eq!(RenderAsShip      , world.visuals[7]);
+	assert_eq!(100               , world.scores[7]);
 }
