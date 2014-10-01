@@ -184,18 +184,12 @@ impl Entity {
 		}
 
 		let mut component_names = Vec::new();
-		for (i, name) in ordered_components.iter().enumerate() {
+		for name in ordered_components.iter() {
 			let ref component = components[name.clone()];
 			let var_name  = component.var_name;
 
-			if i + 1 < components.len() {
-				component_names.push_all(
-					quote_tokens!(&*context, $var_name,).as_slice());
-			}
-			else {
-				component_names.push_all(
-					quote_tokens!(&*context, $var_name).as_slice());
-			}
+			component_names.push_all(
+				quote_tokens!(&*context, $var_name,).as_slice());
 		}
 
 		let ref init_block = entity.init_block;
