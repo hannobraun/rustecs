@@ -8,7 +8,7 @@ pub fn camel_to_snake_case(ident: ast::Ident) -> String {
 	let mut snake_case = String::new();
 	for (i, c) in camel_case.iter().enumerate() {
 		if c.is_uppercase() && i != 0 {
-			snake_case = snake_case.append("_");
+			snake_case.push_str("_");
 		}
 
 		snake_case.push_char(c.to_lowercase().to_char());
@@ -26,9 +26,11 @@ fn pluralize(s: String) -> String {
 
 	if s.as_slice().ends_with("y") {
 		p.pop_char();
-		p.append("ies")
+		p.push_str("ies");
+		p
 	}
 	else {
-		s.append("s")
+		p.push_str("s");
+		p
 	}
 }
