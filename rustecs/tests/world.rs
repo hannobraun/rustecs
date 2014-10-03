@@ -89,7 +89,7 @@ fn it_should_destroy_entities() {
 }
 
 #[test]
-fn it_should_export_entities() {
+fn it_should_export_all_entities() {
 	let mut world = World::new();
 
 	let missile_id = world.create_missile(8.0, 12.0);
