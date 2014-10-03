@@ -329,6 +329,7 @@ impl World {
 				}
 
 				pub fn import_entity(&mut self, entity: Entity) {
+					self.entities.insert(entity.id);
 					let world = self;
 					$imports
 				}

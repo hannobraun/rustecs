@@ -150,34 +150,18 @@ fn it_should_create_a_world_from_exported_entities() {
 fn it_should_import_entities() {
 	let mut world = World::new();
 
-	world.import_entity(Entity {
+	let entity = Entity {
 		id      : 5,
 		position: Some(Position(8.0, 12.0)),
 		visual  : Some(RenderAsMissile),
 		score   : None,
-	});
+	};
+	world.import_entity(entity);
 
-	assert_eq!(1, world.positions.len());
-	assert_eq!(1, world.visuals.len());
-	assert_eq!(0, world.scores.len());
+	let entities = world.export_entities();
 
-	assert_eq!(Position(8.0, 12.0), world.positions[5]);
-	assert_eq!(RenderAsMissile    , world.visuals[5]);
-
-	world.import_entity(Entity {
-		id      : 8,
-		position: Some(Position(0.0, 0.0)),
-		visual  : Some(RenderAsShip),
-		score   : Some(100),
-	});
-
-	assert_eq!(2, world.positions.len());
-	assert_eq!(2, world.visuals.len());
-	assert_eq!(1, world.scores.len());
-
-	assert_eq!(Position(0.0, 0.0), world.positions[8]);
-	assert_eq!(RenderAsShip      , world.visuals[8]);
-	assert_eq!(100               , world.scores[8]);
+	assert_eq!(1, entities.len());
+	assert_eq!(entity, entities[0]);
 }
 
 #[test]
