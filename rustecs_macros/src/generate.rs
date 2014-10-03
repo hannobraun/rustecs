@@ -328,6 +328,11 @@ impl World {
 						.collect()
 				}
 
+				pub fn import_entity(&mut self, entity: Entity) {
+					let world = self;
+					$imports
+				}
+
 				$create_fns
 
 				$import_fns
