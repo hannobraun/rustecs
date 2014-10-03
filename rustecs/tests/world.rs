@@ -95,7 +95,7 @@ fn it_should_export_entities() {
 	let missile_id = world.create_missile(8.0, 12.0);
 	let ship_id    = world.create_ship(100);
 
-	let entities = world.to_entities();
+	let entities = world.export_entities();
 
 	assert_eq!(2, entities.len());
 
@@ -132,7 +132,7 @@ fn it_should_create_a_world_from_exported_entities() {
 	let missile_id = old_world.create_missile(8.0, 12.0);
 	let ship_id    = old_world.create_ship(100);
 
-	let world = World::from_entities(old_world.to_entities());
+	let world = World::from_entities(old_world.export_entities());
 
 	assert_eq!(2, world.positions.len());
 	assert_eq!(2, world.visuals.len());

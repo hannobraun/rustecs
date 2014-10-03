@@ -317,7 +317,7 @@ impl World {
 					world
 				}
 
-				pub fn to_entities(&self) -> Vec<Entity> {
+				pub fn export_entities(&self) -> Vec<Entity> {
 					self.entities
 						.iter()
 						.map(|id|
