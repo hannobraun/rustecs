@@ -163,27 +163,3 @@ fn it_should_import_entities() {
 	assert_eq!(1, entities.len());
 	assert_eq!(entity, entities[0]);
 }
-
-#[test]
-fn it_should_import_single_entities() {
-	let mut world = World::new();
-
-	world.import_missile(5, 8.0, 12.0);
-
-	assert_eq!(1, world.positions.len());
-	assert_eq!(1, world.visuals.len());
-	assert_eq!(0, world.scores.len());
-
-	assert_eq!(Position(8.0, 12.0), world.positions[5]);
-	assert_eq!(RenderAsMissile    , world.visuals[5]);
-
-	world.import_ship(7, 100);
-
-	assert_eq!(2, world.positions.len());
-	assert_eq!(2, world.visuals.len());
-	assert_eq!(1, world.scores.len());
-
-	assert_eq!(Position(0.0, 0.0), world.positions[7]);
-	assert_eq!(RenderAsShip      , world.visuals[7]);
-	assert_eq!(100               , world.scores[7]);
-}
