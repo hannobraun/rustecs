@@ -126,7 +126,7 @@ fn it_should_export_entities() {
 }
 
 #[test]
-fn it_should_import_entities() {
+fn it_should_create_a_world_from_exported_entities() {
 	let mut old_world = World::new();
 
 	let missile_id = old_world.create_missile(8.0, 12.0);
