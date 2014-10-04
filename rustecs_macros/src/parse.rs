@@ -29,10 +29,10 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<Entity> {
 
 
 pub struct Entity {
-	pub name      : ast::Ident,
-	pub components: Vec<ast::Ident>,
-	pub args      : Vec<ast::Arg>,
-	pub init_block: P<ast::Block>,
+	pub name       : ast::Ident,
+	pub components : Vec<ast::Ident>,
+	pub args       : Vec<ast::Arg>,
+	pub constr_impl: ConstructorImpl,
 }
 
 impl Entity {
@@ -64,13 +64,27 @@ impl Entity {
 			seq_sep_trailing_allowed(token::COMMA),
 			|p| p.parse_ident());
 
-		let init_block = parser.parse_block();
+
+		let constructor_impl = if parser.eat(&token::EQ) {
+			let constructor_fn_name = parser.parse_ident();
+			parser.expect(&token::SEMI);
+
+			External(constructor_fn_name)
+		}
+		else {
+			Inline(parser.parse_block())
+		};
 
 		Entity {
-			name      : name,
-			components: components,
-			args      : args,
-			init_block: init_block
+			name       : name,
+			components : components,
+			args       : args,
+			constr_impl: constructor_impl,
 		}
 	}
+}
+
+pub enum ConstructorImpl {
+	Inline(P<ast::Block>),
+	External(ast::Ident),
 }

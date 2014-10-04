@@ -8,7 +8,11 @@ use names::{
 	camel_to_snake_case,
 	type_to_collection_name,
 };
-use parse;
+use parse::{
+	mod,
+	External,
+	Inline
+};
 
 
 pub fn items(context: &ExtCtxt, ecs: &Vec<parse::Entity>) -> Vec<P<ast::Item>> {
@@ -184,7 +188,31 @@ impl Entity {
 				quote_tokens!(&*context, $var_name,).as_slice());
 		}
 
-		let ref init_block = entity.init_block;
+		let constr_call = match entity.constr_impl {
+			Inline(ref block) => {
+				quote_tokens!(context, $block)
+			},
+			External(fn_name) => {
+				let mut constr_args = Vec::new();
+				for arg in entity.args.iter() {
+					let arg_name = match arg.pat.node {
+						ast::PatIdent(_, spanned, _) => {
+							let arg_name = spanned.node;
+							constr_args.push_all(
+								quote_tokens!(context,
+									$arg_name,
+								)
+								.as_slice()
+							);
+						},
+
+						_ => fail!("Expected an identifier"),
+					};
+				}
+
+				quote_tokens!(context, $fn_name($constr_args))
+			},
+		};
 
 		let mut inserts = Vec::new();
 		for (_, component) in components.iter() {
@@ -196,7 +224,7 @@ impl Entity {
 				let id = self.next_id;
 				self.next_id += 1;
 
-				let ($component_names) = $init_block;
+				let ($component_names) = $constr_call;
 
 				self.entities.insert(id);
 				$inserts
