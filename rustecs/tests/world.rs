@@ -19,28 +19,21 @@ pub enum Visual {
 pub type Score = u32;
 
 
-world!(
-	Missile(Position, Visual): (x: f64, y: f64) {
+world! {
+	entity_constructor missile(x: f64, y: f64) -> (Position, Visual) {
 		(
 			Position(x, y),
-			RenderAsMissile
+			RenderAsMissile,
 		)
 	}
-	Ship(Position, Visual, Score): (score: u32) {
+	entity_constructor ship(score: u32) -> (Position, Visual, Score) {
 		(
 			Position(0.0, 0.0),
 			RenderAsShip,
-			score
+			score,
 		)
 	}
-	EntityWithOneComponentNoArgs(Score): () {
-		(
-			// ATTENTION: You need this trailing comma, otherwise the parser
-			// won't recognize this is a tuple.
-			0,
-		)
-	}
-)
+}
 
 
 #[test]

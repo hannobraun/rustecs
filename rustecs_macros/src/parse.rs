@@ -1,7 +1,7 @@
 use syntax::ast;
 use syntax::ext::base::ExtCtxt;
 use syntax::parse;
-use syntax::parse::common::seq_sep_trailing_disallowed;
+use syntax::parse::common::seq_sep_trailing_allowed;
 use syntax::parse::parser::Parser;
 use syntax::parse::token;
 use syntax::ptr::P;
@@ -37,20 +37,32 @@ pub struct Entity {
 
 impl Entity {
 	fn parse(parser: &mut Parser) -> Entity {
-		let name = parser.parse_ident();
-		let components = parser.parse_unspanned_seq(
-			&token::LPAREN,
-			&token::RPAREN,
-			seq_sep_trailing_disallowed(token::COMMA),
-			|p| p.parse_ident());
+		let declaration_type = parser.parse_ident();
+		if declaration_type.as_str() != "entity_constructor" {
+			parser.fatal(
+				format!(
+					"Expected entity_constructor, found {}",
+					declaration_type.as_str(),
+				)
+				.as_slice()
+			);
+		}
 
-		parser.expect(&token::COLON);
+		let name = parser.parse_ident();
 
 		let args = parser.parse_unspanned_seq(
 			&token::LPAREN,
 			&token::RPAREN,
-			seq_sep_trailing_disallowed(token::COMMA),
+			seq_sep_trailing_allowed(token::COMMA),
 			|p| p.parse_arg());
+
+		parser.expect(&token::RARROW);
+
+		let components = parser.parse_unspanned_seq(
+			&token::LPAREN,
+			&token::RPAREN,
+			seq_sep_trailing_allowed(token::COMMA),
+			|p| p.parse_ident());
 
 		let init_block = parser.parse_block();
 
