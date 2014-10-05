@@ -198,3 +198,55 @@ The triggering of the event would look like this:
 ``` Rust
 world.trigger_update(1.0 / 60.0);
 ```
+
+
+## Delayed Changes
+
+There are few changes that can be made to the world that could wreak some havok,
+if they were done during system execution:
+- Creating entities
+- Destroying entities
+- Triggering events
+
+I haven't tried it with Rustecs yet, but I've worked with other entity systems
+in JavaScript in the past, and had to debug a few subtle bugs due to this issue.
+I guess in Rust, the borrow checker would prevent that stuff outright.
+
+In my game, I currently have this piece of code:
+
+``` Rust
+let mut entities_to_destroy = vec![];
+for (&body_id, body) in self.world.bodies.iter() {
+	for (_, planet) in self.world.planets.iter() {
+		if (body.position - planet.position).length() <= planet.radius {
+			entities_to_destroy.push(body_id);
+		}
+	}
+}
+for &id in entities_to_destroy.iter() {
+	self.world.destroy_entity(id);
+}
+```
+
+One obvious issue (yes, there are others :) ) is the deferred deletion here.
+This kind of stuff should really be implemented as part of the entity system,
+otherwise this code would have to be repeated for a lot of systems.
+
+I think a good solution would be a separate control object for world: Instead of
+interacting with the world directly, system code would interact with that
+control object. This could be passed to every system:
+
+```Rust
+fn do_stuff(a: A, b: B, control: &mut WorldControl) {
+	control.create_entity(...);
+	control.destroy_entity(...);
+	control.trigger_some_event(...);
+}
+```
+
+After all systems have been called, `World` would apply the changes made to
+`WorldControl` to itself.
+
+One issue I'm not sure about: Will the control object be passed into every
+system (simple but potentially noisy) or will can it be requested via the DSL
+(less simple but cleaner system code)?
