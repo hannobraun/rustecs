@@ -45,19 +45,13 @@ world! {
 	entity_constructor ship(score: u32) -> (Position, Visual, Score) = create_ship;
 }
 
-
 #[test]
-fn it_should_initialize_an_empty_world() {
-	let world = World::new();
+fn it_should_create_entities() {
+	let mut world = World::new();
 
 	assert_eq!(0, world.positions.len());
 	assert_eq!(0, world.visuals.len());
 	assert_eq!(0, world.scores.len());
-}
-
-#[test]
-fn it_should_create_entities() {
-	let mut world = World::new();
 
 	let missile_id = world.create_missile(8.0, 12.0);
 
