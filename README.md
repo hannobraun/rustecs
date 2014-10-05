@@ -12,13 +12,13 @@ few limitations:
 - It's usable but incomplete. I only implement features I actually need and know
   how to design. Some features you would expect from a generic entity system
   aren't there yet. For some missing features I use crazy workarounds in my own
-  code because I'm not sure yet how to design a general API for them yet.
+  code because I'm not sure yet how to design a generic API for them yet.
 - Performance is good enough but probably not better. I usually go with the
   simplest solution for a given problem without worrying about performance too
   much. So far that has worked well for me, but it might not be enough for you.
 
-If you tried Rustecs and find it lacking, feel free to send me pull request to
-address your concerns!
+If you tried Rustecs and find it lacking, feel free to send me a pull request
+that addresses your concerns!
 
 
 ## Documentation
@@ -34,11 +34,11 @@ https://github.com/hannobraun/rustecs/blob/master/rustecs/tests/
 ### The Basics
 
 Rustecs is implemented as a compiler plugin that generates the code for your
-entity system from specifications in a simple
+entity system from declarations in a simple
 [DSL](http://en.wikipedia.org/wiki/Domain-specific_language).
 
 Let's imagine a simple Asteroids-like game. Here's what the definition for the
-Entity/Component System could look like:
+Entity/Component System could look like.
 
 ``` Rust
 world! {
@@ -64,11 +64,11 @@ three kinds of components (`Position`, `Size` and `Score`).
 
 ### Components
 
-The example is not complete though since we haven't defined what the components
-actually are. Components are just pieces of data and they can be any of Rust's
-data types.
+The example is not complete though, since we haven't defined what the components
+actually are. Components are just pieces of data. They can be any of Rust's data
+types.
 
-Here are the component definitions that complete the example:
+The following type definitions are required to complete the example.
 
 ``` Rust
 // Regular struct
@@ -93,8 +93,8 @@ ourselves with at this point.
 You might ask yourself why we're defining `Score` as `u32` and not just use
 `u32` directly in the world definition above. While that should work (I haven't
 actually tried it), it's not recommended. As we will see, the name of the
-component's type is used to generate other names, for example the name of the
-collection the components of a type are stored in.
+component's type is used to generate other names, for example the names of the
+collections the components are stored in.
 
 You might also have different components that might be represented by the same
 type, so you need the type alias to distinguish between them. Here's an example
@@ -129,14 +129,11 @@ world! {
 }
 ```
 
-Why are we declaring entity constructors here, not the entities themselves?
-Well, contrary to components, entities in Rustecs aren't represented by a data
-structure. An entity is just an id that refers to a bunch of components.
-
-So why do we declare entity constructors instead of more generally declaring an
-entity type? If you come from an object-oriented background, it might come
-natural to you to think of an entity as having a "type", but that's not really
-how an ECS works.
+Why are we declaring entity constructors here, not a more general concept like
+entity types? Contrary to components, entities in Rustecs aren't represented by
+a data structure. An entity is just an id that refers to a bunch of components.
+If you come from an object-oriented background, it seem natural to think of an
+entity as having a "type", but that's not really how an ECS works.
 
 The "type" of an entity is solely defined by the components it has. When
 implementing the logic for the ECS, you won't say "give me all ships" or "give
@@ -145,10 +142,13 @@ and a velocity" or something similar. It's even possible to add and remove
 components, thereby changing the type of an entity at runtime (theoretically at
 least, I haven't actually tried it in Rustecs).
 
-The only thing that's specific to the "type" of entity is the way it is
-constructed. Therefore we define entity constructors.
+The only thing that's specific to the "type" of an entity is the way it is
+constructed. Once it exists, there's nothing that distinguishes entities besides
+their components. That's the reason we define entity constructors and nothing
+else.
 
-Given the world definition above, we can then create entities like this:
+Given the world definition above, we can then create our world and add some
+entities to it.
 
 ``` Rust
 // world! { ... } generates a type called World. Here we create a new world.
@@ -169,19 +169,19 @@ world.destroy_entity(ship_id);
 
 ### Systems
 
-We' defined entity constructors and components, so we have all the tools we need
-to populate our world with data. What we haven't done it is actually do
-something with that data.
+We know how to define entity constructors and components, so we have all th
+tools we need to populate our world with data. What we haven't done it is
+actually do something with that data.
 
-In an ECS, the logic of a game is implemented in systems. Systems are basically
-just functions that operate on a set of entities. Those entities are defined by
-the components they have.
+In an ECS, the logic of a game is implemented in systems. Systems are just
+functions that operate on a set of entities. Those entities are defined by the
+components they have.
 
-As I'm writing this Rustecs doesn't have direct support for systems yet, but of
-course you can still write systems that operate on your entities (otherwise
-Rustecs would be pretty useless).
+As I'm writing this Rustecs doesn't have direct support for systems yet (I'm
+working on it), but of course you can still write systems that operate on your
+entities (otherwise Rustecs would be pretty much useless).
 
-Let's look at this simple world:
+Let's take a look at this simple world.
 
 ``` Rust
 world! {
@@ -225,7 +225,7 @@ that.
 ``` Rust
 fn move_cars(positions: Components<Position>, velocities: Componenty<Velocity>) {
 	for (entity_id, position) in positions.iter_mut() {
-		if !velocity.contains_key(entity_id) {
+		if !velocities.contains_key(entity_id) {
 			// There might be entities that have a position but no velocity.
 			// Ignore those.
 			continue;
@@ -242,7 +242,6 @@ fn move_cars(positions: Components<Position>, velocities: Componenty<Velocity>) 
 
 The system iterates over all entities with a `Position` component, checks if the
 entity also has a `Velocity` component and integrates the position, if it has.
-
 Currently, `Components<T>` is simply defined as `HashMap<EntityId, T>`.
 
 So how do we call that system? Let's complete our main function from above.
