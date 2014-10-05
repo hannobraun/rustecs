@@ -7,7 +7,7 @@ use syntax::parse::token;
 use syntax::ptr::P;
 
 
-pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<Entity> {
+pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<EntityConstructor> {
 	let mut parser = parse::new_parser_from_tts(
 		context.parse_sess(),
 		context.cfg(),
@@ -17,7 +17,7 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<Entity> {
 	let mut entities = Vec::new();
 
 	loop {
-		entities.push(Entity::parse(&mut parser));
+		entities.push(EntityConstructor::parse(&mut parser));
 
 		if parser.eat(&token::EOF) {
 			break;
@@ -28,15 +28,15 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<Entity> {
 }
 
 
-pub struct Entity {
+pub struct EntityConstructor {
 	pub name       : ast::Ident,
 	pub components : Vec<ast::Ident>,
 	pub args       : Vec<ast::Arg>,
 	pub constr_impl: ConstructorImpl,
 }
 
-impl Entity {
-	fn parse(parser: &mut Parser) -> Entity {
+impl EntityConstructor {
+	fn parse(parser: &mut Parser) -> EntityConstructor {
 		let declaration_type = parser.parse_ident();
 		if declaration_type.as_str() != "entity_constructor" {
 			parser.fatal(
@@ -75,7 +75,7 @@ impl Entity {
 			Inline(parser.parse_block())
 		};
 
-		Entity {
+		EntityConstructor {
 			name       : name,
 			components : components,
 			args       : args,

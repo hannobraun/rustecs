@@ -15,7 +15,7 @@ use parse::{
 };
 
 
-pub fn items(context: &ExtCtxt, ecs: &Vec<parse::Entity>) -> Vec<P<ast::Item>> {
+pub fn items(context: &ExtCtxt, ecs: &Vec<parse::EntityConstructor>) -> Vec<P<ast::Item>> {
 	let components = Component::generate_components(context, ecs);
 
 	let entities: Vec<Entity> = ecs
@@ -50,7 +50,7 @@ pub struct Component {
 impl Component {
 	fn generate_components(
 		context : &ExtCtxt,
-		entities: &Vec<parse::Entity>
+		entities: &Vec<parse::EntityConstructor>
 	) -> HashMap<String, Component> {
 		let mut components = HashMap::new();
 
@@ -134,7 +134,7 @@ pub struct Entity {
 impl Entity {
 	fn generate(
 		context       : &ExtCtxt,
-		entity        : &parse::Entity,
+		entity        : &parse::EntityConstructor,
 		all_components: &HashMap<String, Component>
 	) -> Entity {
 		let entity_components = entity.components
@@ -166,7 +166,7 @@ impl Entity {
 
 	fn create_fn(
 		context           : &ExtCtxt,
-		entity            : &parse::Entity,
+		entity            : &parse::EntityConstructor,
 		components        : &HashMap<String, Component>,
 		ordered_components: &Vec<String>
 	) -> Vec<ast::TokenTree> {
