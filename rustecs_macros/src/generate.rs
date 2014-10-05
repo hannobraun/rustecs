@@ -18,10 +18,10 @@ use parse::{
 pub fn items(context: &ExtCtxt, ecs: &Vec<parse::EntityConstructor>) -> Vec<P<ast::Item>> {
 	let components = Component::generate_components(context, ecs);
 
-	let entities: Vec<Entity> = ecs
+	let entities: Vec<EntityConstructor> = ecs
 		.iter()
 		.map(|entity|
-			Entity::generate(context, entity, &components))
+			EntityConstructor::generate(context, entity, &components))
 		.collect();
 
 	let world = World::generate(context, &entities);
@@ -125,18 +125,18 @@ impl Component {
 
 
 #[deriving(Clone)]
-pub struct Entity {
+pub struct EntityConstructor {
 	name      : ast::Ident,
 	components: HashMap<String, Component>,
 	create_fn : Vec<ast::TokenTree>,
 }
 
-impl Entity {
+impl EntityConstructor {
 	fn generate(
 		context       : &ExtCtxt,
 		entity        : &parse::EntityConstructor,
 		all_components: &HashMap<String, Component>
-	) -> Entity {
+	) -> EntityConstructor {
 		let entity_components = entity.components
 			.iter()
 			.map(|&ident| {
@@ -151,13 +151,13 @@ impl Entity {
 				token::get_ident(ident).to_string())
 			.collect();
 
-		let create_fn = Entity::create_fn(
+		let create_fn = EntityConstructor::create_fn(
 			context,
 			entity,
 			&entity_components,
 			&ordered_components);
 
-		Entity {
+		EntityConstructor {
 			name      : entity.name,
 			components: entity_components,
 			create_fn : create_fn,
@@ -239,7 +239,7 @@ impl Entity {
 struct World(Vec<P<ast::Item>>);
 
 impl World {
-	fn generate(context: &ExtCtxt, entities: &Vec<Entity>) -> World {
+	fn generate(context: &ExtCtxt, entities: &Vec<EntityConstructor>) -> World {
 		let components = World::components(entities);
 
 		let decls        = World::component_decls(&components);
@@ -332,7 +332,7 @@ impl World {
 		World(items)
 	}
 
-	fn components(entities: &Vec<Entity>) -> HashMap<String, Component> {
+	fn components(entities: &Vec<EntityConstructor>) -> HashMap<String, Component> {
 		let mut components = HashMap::new();
 
 		for entity in entities.iter() {
@@ -378,7 +378,7 @@ impl World {
 		tokens
 	}
 
-	fn create_fns(entities: &Vec<Entity>) -> Vec<ast::TokenTree> {
+	fn create_fns(entities: &Vec<EntityConstructor>) -> Vec<ast::TokenTree> {
 		let mut tokens = Vec::new();
 
 		for entity in entities.iter() {
