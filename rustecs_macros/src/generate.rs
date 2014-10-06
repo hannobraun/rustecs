@@ -112,10 +112,7 @@ impl Component {
 struct World(Vec<P<ast::Item>>);
 
 impl World {
-	fn generate(
-		context   : &ExtCtxt,
-		components: &Components,
-	) -> World {
+	fn generate(context: &ExtCtxt, components: &Components) -> World {
 		let collection_decls = World::collection_decls(components);
 		let collection_inits = World::collection_inits(components);
 		let inserts          = World::inserts(components);
@@ -185,9 +182,7 @@ impl World {
 		World(items)
 	}
 
-	fn collection_decls(
-		components: &Components
-	) -> Tokens {
+	fn collection_decls(components: &Components) -> Tokens {
 		let mut tokens = vec!();
 
 		for (_, component) in components.iter() {
@@ -197,9 +192,7 @@ impl World {
 		tokens
 	}
 
-	fn collection_inits(
-		components: &Components
-	) -> Tokens {
+	fn collection_inits(components: &Components) -> Tokens {
 		let mut tokens = vec!();
 
 		for (_, component) in components.iter() {
@@ -229,9 +222,7 @@ impl World {
 		removes
 	}
 
-	fn field_sets(
-		components: &Components
-	) -> Tokens {
+	fn field_sets(components: &Components) -> Tokens {
 		let mut init = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -246,10 +237,7 @@ impl World {
 struct Entity(Vec<P<ast::Item>>);
 
 impl Entity {
-	fn generate(
-		context   : &ExtCtxt,
-		components: &Components,
-	) -> Entity {
+	fn generate(context: &ExtCtxt, components: &Components) -> Entity {
 		let field_decls = Entity::field_decls(components);
 		let field_inits = Entity::field_inits(components);
 
@@ -277,9 +265,7 @@ impl Entity {
 		Entity(items)
 	}
 
-	fn field_decls(
-		components: &Components
-	) -> Tokens {
+	fn field_decls(components: &Components) -> Tokens {
 		let mut decls = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -289,9 +275,7 @@ impl Entity {
 		decls
 	}
 
-	fn field_inits(
-		components: &Components
-	) -> Tokens {
+	fn field_inits(components: &Components) -> Tokens {
 		let mut inits = Vec::new();
 
 		for (_, component) in components.iter() {
