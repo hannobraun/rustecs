@@ -36,7 +36,6 @@ pub struct Component {
 	name: String,
 
 	var_name   : ast::Ident,
-	init       : Vec<ast::TokenTree>,
 	import     : Vec<ast::TokenTree>,
 	insert     : Vec<ast::TokenTree>,
 	remove     : Vec<ast::TokenTree>,
@@ -44,6 +43,7 @@ pub struct Component {
 	entity_init: Vec<ast::TokenTree>,
 
 	collection_decl: Vec<ast::TokenTree>,
+	collection_init: Vec<ast::TokenTree>,
 }
 
 impl Component {
@@ -59,7 +59,7 @@ impl Component {
 			pub $collection: ::rustecs::Components<$ty>,
 		);
 
-		let init = quote_tokens!(&*context,
+		let collection_init = quote_tokens!(&*context,
 			$collection: ::rustecs::components(),
 		);
 
@@ -92,7 +92,6 @@ impl Component {
 		Component {
 			name       : token::get_ident(ty).to_string(),
 			var_name   : var_name,
-			init       : init,
 			import     : import,
 			insert     : insert,
 			remove     : remove,
@@ -100,6 +99,7 @@ impl Component {
 			entity_init: entity_init,
 
 			collection_decl: collection_decl,
+			collection_init: collection_init,
 		}
 	}
 }
@@ -208,7 +208,7 @@ impl World {
 		let mut tokens = vec!();
 
 		for (_, component) in components.iter() {
-			tokens.push_all(component.init.as_slice());
+			tokens.push_all(component.collection_init.as_slice());
 		}
 
 		tokens
