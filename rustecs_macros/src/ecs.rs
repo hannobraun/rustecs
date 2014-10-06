@@ -16,9 +16,9 @@ pub fn expand(
 	_         : codemap::Span,
 	token_tree: &[ast::TokenTree]
 ) -> Box<MacResult + 'static> {
-	let ecs = parse(context, token_tree);
+	let world = parse(context, token_tree);
 
-	let items = generate::items(context, &ecs.entity_constructors);
+	let items = generate::items(context, &world.entity_constructors);
 
 	let result = MacroResult {
 		items: items
