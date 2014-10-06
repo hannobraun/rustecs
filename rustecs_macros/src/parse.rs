@@ -14,24 +14,30 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 		token_tree.to_vec()
 	);
 
-	let mut entities = Vec::new();
-
-	loop {
-		entities.push(EntityConstructor::parse(&mut parser));
-
-		if parser.eat(&token::EOF) {
-			break;
-		}
-	}
-
-	World {
-		entity_constructors: entities
-	}
+	World::parse(&mut parser)
 }
 
 
 pub struct World {
 	pub entity_constructors: Vec<EntityConstructor>,
+}
+
+impl World {
+	fn parse(parser: &mut Parser) -> World {
+		let mut entities = Vec::new();
+
+		loop {
+			entities.push(EntityConstructor::parse(parser));
+
+			if parser.eat(&token::EOF) {
+				break;
+			}
+		}
+
+		World {
+			entity_constructors: entities
+		}
+	}
 }
 
 
