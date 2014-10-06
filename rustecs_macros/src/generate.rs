@@ -33,12 +33,11 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 
 #[deriving(Clone, Show)]
 pub struct Component {
-	name: String,
-
-	var_name   : ast::Ident,
-	import     : Vec<ast::TokenTree>,
-	insert     : Vec<ast::TokenTree>,
-	remove     : Vec<ast::TokenTree>,
+	name    : String,
+	var_name: ast::Ident,
+	import  : Vec<ast::TokenTree>,
+	insert  : Vec<ast::TokenTree>,
+	remove  : Vec<ast::TokenTree>,
 
 	field_decl  : Vec<ast::TokenTree>,
 	field_import: Vec<ast::TokenTree>,
@@ -91,11 +90,11 @@ impl Component {
 		);
 
 		Component {
-			name       : token::get_ident(ty).to_string(),
-			var_name   : var_name,
-			import     : import,
-			insert     : insert,
-			remove     : remove,
+			name    : token::get_ident(ty).to_string(),
+			var_name: var_name,
+			import  : import,
+			insert  : insert,
+			remove  : remove,
 
 			field_decl  : field_decl,
 			field_import: field_import,
