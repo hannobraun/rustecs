@@ -27,21 +27,21 @@ pub type Component = u32;
 fn it_should_export_all_entities() {
 	let mut world = World::new();
 
-	let id_1 = world.create_my_entity(5);
-	let id_2 = world.create_my_entity(8);
+	let entity_1 = Entity {
+		id       : 0, // ignored
+		component: Some(5),
+	};
+	let entity_2 = Entity {
+		id       : 1, //ignored
+		component: Some(8),
+	};
+
+	let id_1 = world.create_entity(entity_1);
+	let id_2 = world.create_entity(entity_2);
 
 	let entities = world.export_entities();
 
 	assert_eq!(2, entities.len());
-
-	let entity_1 = Entity {
-		id       : id_1,
-		component: Some(5),
-	};
-	let entity_2 = Entity {
-		id       : id_2,
-		component: Some(8),
-	};
 
 	for &entity in entities.iter() {
 		if entity.id == id_1 {
