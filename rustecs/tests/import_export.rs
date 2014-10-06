@@ -9,14 +9,6 @@ extern crate rustecs;
 
 world! {
 	components Component;
-
-	// Inline entity constructor. This is good for the general case, since it
-	// avoids the duplication of external entity constructors.
-	entity_constructor my_entity(value: u32) -> (Component) {
-		(
-			value,
-		)
-	}
 }
 
 
