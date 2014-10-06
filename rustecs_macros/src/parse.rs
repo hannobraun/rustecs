@@ -19,16 +19,29 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 
 
 pub struct World {
+	pub components         : Vec<ast::Ident>,
 	pub entity_constructors: Vec<EntityConstructor>,
 }
 
 impl World {
 	fn parse(parser: &mut Parser) -> World {
-		let mut entities = Vec::new();
+		let mut components = Vec::new();
+		let mut entities   = Vec::new();
 
 		loop {
 			let declaration = parser.parse_ident();
 			match declaration.as_str() {
+				"components" => {
+					loop {
+						components.push(parser.parse_ident());
+
+						parser.eat(&token::COMMA);
+						if parser.eat(&token::SEMI) {
+							break;
+						}
+					}
+				},
+
 				"entity_constructor" =>
 					entities.push(EntityConstructor::parse(parser)),
 
@@ -50,7 +63,8 @@ impl World {
 		}
 
 		World {
-			entity_constructors: entities
+			components         : components,
+			entity_constructors: entities,
 		}
 	}
 }
