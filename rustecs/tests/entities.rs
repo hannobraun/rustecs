@@ -47,14 +47,24 @@ fn it_should_create_entities() {
 	assert_eq!(0, world.positions.len());
 	assert_eq!(0, world.scores.len());
 
-	let missile_id = world.create_missile(8.0, 12.0);
+	let missile = Entity {
+		id      : 0, // ignored
+		position: Some(Position(8.0, 12.0)),
+		score   : None,
+	};
+	let missile_id = world.create_entity(missile);
 
 	assert_eq!(1, world.positions.len());
 	assert_eq!(0, world.scores.len());
 
 	assert_eq!(Position(8.0, 12.0), world.positions[missile_id]);
 
-	let ship_id = world.create_ship(100);
+	let ship = Entity {
+		id      : 0, // ignored
+		position: Some(Position(0.0, 0.0)),
+		score   : Some(100),
+	};
+	let ship_id = world.create_entity(ship);
 
 	assert_eq!(2, world.positions.len());
 	assert_eq!(1, world.scores.len());

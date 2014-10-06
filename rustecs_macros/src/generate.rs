@@ -299,6 +299,17 @@ impl World {
 
 				$create_fns
 
+				pub fn create_entity(&mut self, entity: Entity) -> ::rustecs::EntityId {
+					let id = self.next_id;
+					self.next_id += 1;
+
+					let world = self;
+
+					$imports
+
+					id
+				}
+
 				pub fn destroy_entity(&mut self, id: ::rustecs::EntityId) {
 					self.entities.remove(&id);
 
