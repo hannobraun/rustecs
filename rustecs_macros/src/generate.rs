@@ -109,7 +109,7 @@ impl World {
 	) -> World {
 		let collection_decls = World::collection_decls(components);
 		let collection_inits = World::collection_inits(components);
-		let imports          = World::imports(components);
+		let inserts          = World::inserts(components);
 		let removes          = World::removes(components);
 		let field_sets       = World::field_sets(components);
 
@@ -145,7 +145,7 @@ impl World {
 				pub fn import_entity(&mut self, id: ::rustecs::EntityId, entity: Entity) {
 					self.entities.insert(id);
 					let world = self;
-					$imports
+					$inserts
 				}
 
 				pub fn create_entity(&mut self, entity: Entity) -> ::rustecs::EntityId {
@@ -156,7 +156,7 @@ impl World {
 
 					let world = self;
 
-					$imports
+					$inserts
 
 					id
 				}
@@ -200,7 +200,7 @@ impl World {
 		tokens
 	}
 
-	fn imports(components: &HashMap<String, Component>) -> Vec<ast::TokenTree> {
+	fn inserts(components: &HashMap<String, Component>) -> Vec<ast::TokenTree> {
 		let mut tokens = Vec::new();
 
 		for (_, component) in components.iter() {
