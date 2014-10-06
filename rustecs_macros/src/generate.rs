@@ -137,26 +137,6 @@ impl World {
 					}
 				}
 
-				pub fn from_entities(entities: Vec<Entity>) -> World {
-					let mut world = World {
-						entities: ::std::collections::HashSet::new(),
-						next_id : 0,
-						$inits
-					};
-
-					for entity in entities.move_iter() {
-						let id = entity.id;
-						world.entities.insert(id);
-						if entity.id > world.next_id {
-							world.next_id = entity.id + 1;
-						}
-
-						$imports
-					}
-
-					world
-				}
-
 				pub fn export_entities(&self) -> Vec<Entity> {
 					self.entities
 						.iter()

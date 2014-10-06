@@ -49,28 +49,6 @@ fn it_should_export_all_entities() {
 }
 
 #[test]
-fn it_should_create_a_world_from_exported_entities() {
-	let mut old_world = World::new();
-
-	let entity_1 = Entity {
-		id       : 0, // ignored
-		component: Some(5),
-	};
-	let entity_2 = Entity {
-		id       : 1, //ignored
-		component: Some(8),
-	};
-
-	let id_1 = old_world.create_entity(entity_1);
-	let id_2 = old_world.create_entity(entity_2);
-
-	let world = World::from_entities(old_world.export_entities());
-
-	assert_eq!(5, world.components[id_1]);
-	assert_eq!(8, world.components[id_2]);
-}
-
-#[test]
 fn it_should_import_entities() {
 	let mut world = World::new();
 
