@@ -38,7 +38,7 @@ pub struct Component {
 	name    : String,
 	var_name: ast::Ident,
 
-	import: Vec<ast::TokenTree>,
+	insert: Vec<ast::TokenTree>,
 	remove: Vec<ast::TokenTree>,
 
 	field_decl: Vec<ast::TokenTree>,
@@ -56,7 +56,7 @@ impl Component {
 			type_to_collection_name(ty).as_slice()
 		));
 
-		let import = quote_tokens!(&*context,
+		let insert = quote_tokens!(&*context,
 			match entity.$var_name {
 				Some(component) => {
 					let _ = world.$collection.insert(id, component);
@@ -86,8 +86,9 @@ impl Component {
 		Component {
 			name    : token::get_ident(ty).to_string(),
 			var_name: var_name,
-			import  : import,
-			remove  : remove,
+
+			insert: insert,
+			remove: remove,
 
 			field_decl: field_decl,
 			field_set : field_set,
@@ -203,7 +204,7 @@ impl World {
 		let mut tokens = Vec::new();
 
 		for (_, component) in components.iter() {
-			tokens.push_all(component.import.as_slice());
+			tokens.push_all(component.insert.as_slice());
 		}
 
 		tokens
