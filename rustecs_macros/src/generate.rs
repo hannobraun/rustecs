@@ -175,7 +175,7 @@ impl World {
 					$inserts
 				}
 
-				pub fn create_entity(&mut self, entity: Entity) -> ::rustecs::EntityId {
+				pub fn add_entity(&mut self, entity: Entity) -> ::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 1;
 

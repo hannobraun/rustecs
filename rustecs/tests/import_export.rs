@@ -22,8 +22,8 @@ fn it_should_export_all_entities() {
 	let entity_1 = Entity::new().with_component(5);
 	let entity_2 = Entity::new().with_component(8);
 
-	let id_1 = world.create_entity(entity_1);
-	let id_2 = world.create_entity(entity_2);
+	let id_1 = world.add_entity(entity_1);
+	let id_2 = world.add_entity(entity_2);
 
 	let entities = world.export_entities();
 
