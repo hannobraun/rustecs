@@ -40,8 +40,8 @@ pub struct Component {
 	insert     : Vec<ast::TokenTree>,
 	remove     : Vec<ast::TokenTree>,
 
-	field_decl : Vec<ast::TokenTree>,
-	entity_init: Vec<ast::TokenTree>,
+	field_decl  : Vec<ast::TokenTree>,
+	field_import: Vec<ast::TokenTree>,
 
 	collection_decl: Vec<ast::TokenTree>,
 	collection_init: Vec<ast::TokenTree>,
@@ -86,7 +86,7 @@ impl Component {
 			pub $var_name: Option<$ty>,
 		);
 
-		let entity_init = quote_tokens!(&*context,
+		let field_import = quote_tokens!(&*context,
 			$var_name: self.$collection.find_copy(id),
 		);
 
@@ -97,8 +97,8 @@ impl Component {
 			insert     : insert,
 			remove     : remove,
 
-			field_decl : field_decl,
-			entity_init: entity_init,
+			field_decl  : field_decl,
+			field_import: field_import,
 
 			collection_decl: collection_decl,
 			collection_init: collection_init,
@@ -254,7 +254,7 @@ impl World {
 		let mut init = Vec::new();
 
 		for (_, component) in components.iter() {
-			init.push_all(component.entity_init.as_slice());
+			init.push_all(component.field_import.as_slice());
 		}
 
 		init
