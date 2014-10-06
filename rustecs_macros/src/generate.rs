@@ -37,8 +37,8 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 pub struct Component {
 	name    : String,
 	var_name: ast::Ident,
-	import  : Vec<ast::TokenTree>,
 
+	import: Vec<ast::TokenTree>,
 	remove: Vec<ast::TokenTree>,
 
 	field_decl: Vec<ast::TokenTree>,
