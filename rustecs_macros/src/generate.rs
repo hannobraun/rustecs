@@ -39,7 +39,6 @@ pub struct Component {
 	var_name: ast::Ident,
 	import  : Vec<ast::TokenTree>,
 
-	insert: Vec<ast::TokenTree>,
 	remove: Vec<ast::TokenTree>,
 
 	field_decl: Vec<ast::TokenTree>,
@@ -66,10 +65,6 @@ impl Component {
 					()
 			}
 		);
-
-		let insert = quote_tokens!(&*context,
-			self.$collection.insert(id, $var_name);
-		);
 		let remove = quote_tokens!(&*context,
 			self.$collection.remove(&id);
 		);
@@ -92,7 +87,6 @@ impl Component {
 			name    : token::get_ident(ty).to_string(),
 			var_name: var_name,
 			import  : import,
-			insert  : insert,
 			remove  : remove,
 
 			field_decl: field_decl,
