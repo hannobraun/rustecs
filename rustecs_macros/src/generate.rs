@@ -144,7 +144,8 @@ impl World {
 							Entity {
 								id: *id,
 								$entity_init
-							})
+							}
+						)
 						.collect()
 				}
 
