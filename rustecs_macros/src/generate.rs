@@ -16,7 +16,15 @@ use parse::{
 
 
 pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
-	let components = Component::generate_components(context, &world.entity_constructors);
+	let components: HashMap<String, Component> = world.components
+		.iter()
+		.map(|&component|
+			Component::generate(context, component)
+		)
+		.map(|component|
+			(component.name.clone(), component)
+		)
+		.collect();
 
 	let entities: Vec<EntityConstructor> = world.entity_constructors
 		.iter()
@@ -48,25 +56,6 @@ pub struct Component {
 }
 
 impl Component {
-	fn generate_components(
-		context : &ExtCtxt,
-		entities: &Vec<parse::EntityConstructor>
-	) -> HashMap<String, Component> {
-		let mut components = HashMap::new();
-
-		for entity in entities.iter() {
-			for &name in entity.components.iter() {
-				let component = Component::generate(context, name);
-				components.insert(
-					component.name.clone(),
-					component,
-				);
-			}
-		}
-
-		components
-	}
-
 	fn generate(context: &ExtCtxt, ty: ast::Ident) -> Component {
 		let var_name = ast::Ident::new(
 			token::intern(camel_to_snake_case(ty).as_slice()));
