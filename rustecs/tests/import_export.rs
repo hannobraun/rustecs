@@ -43,7 +43,7 @@ fn it_should_export_all_entities() {
 			assert_eq!(entity_2, entity);
 		}
 		else {
-			fail!("Unexpected id: {}", entity.id);
+			fail!("Unexpected id: {}", id);
 		}
 	}
 }
