@@ -56,7 +56,8 @@ pub struct Component {
 impl Component {
 	fn generate(context: &ExtCtxt, ty: ast::Ident) -> Component {
 		let var_name = ast::Ident::new(
-			token::intern(camel_to_snake_case(ty).as_slice()));
+			token::intern(camel_to_snake_case(ty).as_slice())
+		);
 		let collection = ast::Ident::new(token::intern(
 			type_to_collection_name(ty).as_slice()
 		));
