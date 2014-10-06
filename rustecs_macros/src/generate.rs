@@ -32,7 +32,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 			EntityConstructor::generate(context, entity, &components))
 		.collect();
 
-	let world = World::generate(context, &entities);
+	let world = World::generate(context, &components, &entities);
 
 	let mut items = Vec::new();
 	items.push_all(world.0.as_slice());
@@ -228,16 +228,18 @@ impl EntityConstructor {
 struct World(Vec<P<ast::Item>>);
 
 impl World {
-	fn generate(context: &ExtCtxt, entities: &Vec<EntityConstructor>) -> World {
-		let components = World::components(entities);
-
-		let decls        = World::component_decls(&components);
-		let inits        = World::component_inits(&components);
-		let imports      = World::imports(&components);
+	fn generate(
+		context   : &ExtCtxt,
+		components: &HashMap<String, Component>,
+		entities  : &Vec<EntityConstructor>
+	) -> World {
+		let decls        = World::component_decls(components);
+		let inits        = World::component_inits(components);
+		let imports      = World::imports(components);
 		let create_fns   = World::create_fns(entities);
-		let removes      = World::removes(&components);
-		let entity_decls = World::entity_decls(&components);
-		let entity_init  = World::entity_init(&components);
+		let removes      = World::removes(components);
+		let entity_decls = World::entity_decls(components);
+		let entity_init  = World::entity_init(components);
 
 		let structure = quote_item!(&*context,
 			#[deriving(Show)]
@@ -334,18 +336,6 @@ impl World {
 		items.push(entity_struct.unwrap());
 
 		World(items)
-	}
-
-	fn components(entities: &Vec<EntityConstructor>) -> HashMap<String, Component> {
-		let mut components = HashMap::new();
-
-		for entity in entities.iter() {
-			for (name, component) in entity.components.iter() {
-				components.insert((*name).clone(), (*component).clone());
-			}
-		}
-
-		components
 	}
 
 	fn component_decls(
