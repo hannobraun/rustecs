@@ -18,7 +18,7 @@ pub fn expand(
 ) -> Box<MacResult + 'static> {
 	let world = parse(context, token_tree);
 
-	let items = generate::items(context, &world.entity_constructors);
+	let items = generate::items(context, &world);
 
 	let result = MacroResult {
 		items: items
