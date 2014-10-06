@@ -19,12 +19,8 @@ pub type Component = u32;
 fn it_should_export_all_entities() {
 	let mut world = World::new();
 
-	let entity_1 = Entity {
-		component: Some(5),
-	};
-	let entity_2 = Entity {
-		component: Some(8),
-	};
+	let entity_1 = Entity::new().with_component(5);
+	let entity_2 = Entity::new().with_component(8);
 
 	let id_1 = world.create_entity(entity_1);
 	let id_2 = world.create_entity(entity_2);
@@ -50,11 +46,9 @@ fn it_should_export_all_entities() {
 fn it_should_import_entities() {
 	let mut world = World::new();
 
-	let entity = Entity {
-		component: Some(8),
-	};
-	world.import_entity(5, entity);
+	let id = 5;
+	world.import_entity(id, Entity::new().with_component(8));
 
 	assert_eq!(1, world.components.len());
-	assert_eq!(8, world.components[5]);
+	assert_eq!(8, world.components[id]);
 }
