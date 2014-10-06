@@ -55,8 +55,6 @@ impl World {
 					)
 			}
 
-			
-
 			if parser.eat(&token::EOF) {
 				break;
 			}
