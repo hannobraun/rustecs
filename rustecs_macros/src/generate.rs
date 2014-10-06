@@ -22,10 +22,12 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 		)
 		.collect();
 
-	let world = World::generate(context, &components);
+	let world  = World::generate(context, &components);
+	let entity = Entity::generate(context, &components);
 
 	let mut items = Vec::new();
 	items.push_all(world.0.as_slice());
+	items.push_all(entity.0.as_slice());
 
 	items
 }
@@ -114,7 +116,6 @@ impl World {
 		let collection_inits = World::collection_inits(components);
 		let imports          = World::imports(components);
 		let removes          = World::removes(components);
-		let field_decls      = World::field_decls(components);
 		let field_sets       = World::field_sets(components);
 
 		let structure = quote_item!(&*context,
@@ -173,17 +174,9 @@ impl World {
 			}
 		);
 
-		let entity_struct = quote_item!(&*context,
-			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
-			pub struct Entity {
-				$field_decls
-			}
-		);
-
 		let mut items = Vec::new();
 		items.push(structure.unwrap());
 		items.push(implementation.unwrap());
-		items.push(entity_struct.unwrap());
 
 		World(items)
 	}
@@ -232,18 +225,6 @@ impl World {
 		removes
 	}
 
-	fn field_decls(
-		components: &HashMap<String, Component>
-	) -> Vec<ast::TokenTree> {
-		let mut decls = Vec::new();
-
-		for (_, component) in components.iter() {
-			decls.push_all(component.field_decl.as_slice());
-		}
-
-		decls
-	}
-
 	fn field_sets(
 		components: &HashMap<String, Component>
 	) -> Vec<ast::TokenTree> {
@@ -254,5 +235,41 @@ impl World {
 		}
 
 		init
+	}
+}
+
+
+struct Entity(Vec<P<ast::Item>>);
+
+impl Entity {
+	fn generate(
+		context   : &ExtCtxt,
+		components: &HashMap<String, Component>,
+	) -> Entity {
+		let field_decls = Entity::field_decls(components);
+
+		let structure = quote_item!(&*context,
+			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
+			pub struct Entity {
+				$field_decls
+			}
+		);
+
+		let mut items = Vec::new();
+		items.push(structure.unwrap());
+
+		Entity(items)
+	}
+
+	fn field_decls(
+		components: &HashMap<String, Component>
+	) -> Vec<ast::TokenTree> {
+		let mut decls = Vec::new();
+
+		for (_, component) in components.iter() {
+			decls.push_all(component.field_decl.as_slice());
+		}
+
+		decls
 	}
 }
