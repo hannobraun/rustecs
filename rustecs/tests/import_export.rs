@@ -20,11 +20,9 @@ fn it_should_export_all_entities() {
 	let mut world = World::new();
 
 	let entity_1 = Entity {
-		id       : 0, // ignored
 		component: Some(5),
 	};
 	let entity_2 = Entity {
-		id       : 1, //ignored
 		component: Some(8),
 	};
 
@@ -53,7 +51,6 @@ fn it_should_import_entities() {
 	let mut world = World::new();
 
 	let entity = Entity {
-		id       : 0, // ignored
 		component: Some(8),
 	};
 	world.import_entity(5, entity);

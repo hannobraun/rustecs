@@ -141,13 +141,7 @@ impl World {
 					self.entities
 						.iter()
 						.map(|id|
-							(
-								*id,
-								Entity {
-									id: *id,
-									$entity_init
-								}
-							)
+							(*id, Entity { $entity_init })
 						)
 						.collect()
 				}
@@ -182,7 +176,6 @@ impl World {
 		let entity_struct = quote_item!(&*context,
 			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
 			pub struct Entity {
-				pub id: ::rustecs::EntityId,
 				$entity_decls
 			}
 		);

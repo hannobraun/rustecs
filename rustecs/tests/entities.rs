@@ -26,7 +26,6 @@ fn it_should_create_entities() {
 	assert_eq!(0, world.scores.len());
 
 	let missile = Entity {
-		id      : 0, // ignored
 		position: Some(Position(8.0, 12.0)),
 		score   : None,
 	};
@@ -38,7 +37,6 @@ fn it_should_create_entities() {
 	assert_eq!(Position(8.0, 12.0), world.positions[missile_id]);
 
 	let ship = Entity {
-		id      : 0, // ignored
 		position: Some(Position(0.0, 0.0)),
 		score   : Some(100),
 	};
@@ -56,7 +54,6 @@ fn it_should_destroy_entities() {
 	let mut world = World::new();
 
 	let ship = Entity {
-		id      : 0, // ignored
 		position: Some(Position(0.0, 0.0)),
 		score   : Some(100),
 	};
