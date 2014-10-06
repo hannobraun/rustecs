@@ -75,7 +75,7 @@ impl Component {
 		let import = quote_tokens!(&*context,
 			match entity.$var_name {
 				Some(component) => {
-					let _ = world.$collection.insert(entity.id, component);
+					let _ = world.$collection.insert(id, component);
 				},
 				None =>
 					()
@@ -267,7 +267,8 @@ impl World {
 					};
 
 					for entity in entities.move_iter() {
-						world.entities.insert(entity.id);
+						let id = entity.id;
+						world.entities.insert(id);
 						if entity.id > world.next_id {
 							world.next_id = entity.id + 1;
 						}
@@ -290,7 +291,8 @@ impl World {
 				}
 
 				pub fn import_entity(&mut self, entity: Entity) {
-					self.entities.insert(entity.id);
+					let id = entity.id;
+					self.entities.insert(id);
 					let world = self;
 					$imports
 				}
