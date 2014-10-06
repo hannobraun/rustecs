@@ -115,7 +115,7 @@ impl World {
 		let imports          = World::imports(components);
 		let removes          = World::removes(components);
 		let field_decls      = World::field_decls(components);
-		let entity_init      = World::entity_init(components);
+		let field_sets       = World::field_sets(components);
 
 		let structure = quote_item!(&*context,
 			#[deriving(Show)]
@@ -141,7 +141,7 @@ impl World {
 					self.entities
 						.iter()
 						.map(|id|
-							(*id, Entity { $entity_init })
+							(*id, Entity { $field_sets })
 						)
 						.collect()
 				}
@@ -244,7 +244,7 @@ impl World {
 		decls
 	}
 
-	fn entity_init(
+	fn field_sets(
 		components: &HashMap<String, Component>
 	) -> Vec<ast::TokenTree> {
 		let mut init = Vec::new();
