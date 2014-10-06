@@ -25,19 +25,21 @@ fn it_should_create_entities() {
 	assert_eq!(0, world.positions.len());
 	assert_eq!(0, world.scores.len());
 
-	let missile = Entity::new()
-		.with_position(Position(8.0, 12.0));
-	let missile_id = world.create_entity(missile);
+	let missile_id = world.create_entity(
+		Entity::new()
+			.with_position(Position(8.0, 12.0))
+	);
 
 	assert_eq!(1, world.positions.len());
 	assert_eq!(0, world.scores.len());
 
 	assert_eq!(Position(8.0, 12.0), world.positions[missile_id]);
 
-	let ship = Entity::new()
-		.with_position(Position(0.0, 0.0))
-		.with_score(100);
-	let ship_id = world.create_entity(ship);
+	let ship_id = world.create_entity(
+		Entity::new()
+			.with_position(Position(0.0, 0.0))
+			.with_score(100)
+	);
 
 	assert_eq!(2, world.positions.len());
 	assert_eq!(1, world.scores.len());
@@ -50,10 +52,11 @@ fn it_should_create_entities() {
 fn it_should_destroy_entities() {
 	let mut world = World::new();
 
-	let ship = Entity::new()
-		.with_position(Position(0.0, 0.0))
-		.with_score(100);
-	let id = world.create_entity(ship);
+	let id = world.create_entity(
+		Entity::new()
+			.with_position(Position(0.0, 0.0))
+			.with_score(100)
+	);
 
 	world.destroy_entity(id);
 
