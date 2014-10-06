@@ -11,8 +11,11 @@ use names::{
 use parse;
 
 
+type Components = HashMap<String, Component>;
+
+
 pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
-	let components: HashMap<String, Component> = world.components
+	let components: Components = world.components
 		.iter()
 		.map(|&component|
 			Component::generate(context, component)
@@ -110,7 +113,7 @@ struct World(Vec<P<ast::Item>>);
 impl World {
 	fn generate(
 		context   : &ExtCtxt,
-		components: &HashMap<String, Component>,
+		components: &Components,
 	) -> World {
 		let collection_decls = World::collection_decls(components);
 		let collection_inits = World::collection_inits(components);
@@ -182,7 +185,7 @@ impl World {
 	}
 
 	fn collection_decls(
-		components: &HashMap<String, Component>
+		components: &Components
 	) -> Vec<ast::TokenTree> {
 		let mut tokens = vec!();
 
@@ -194,7 +197,7 @@ impl World {
 	}
 
 	fn collection_inits(
-		components: &HashMap<String, Component>
+		components: &Components
 	) -> Vec<ast::TokenTree> {
 		let mut tokens = vec!();
 
@@ -205,7 +208,7 @@ impl World {
 		tokens
 	}
 
-	fn inserts(components: &HashMap<String, Component>) -> Vec<ast::TokenTree> {
+	fn inserts(components: &Components) -> Vec<ast::TokenTree> {
 		let mut tokens = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -215,7 +218,7 @@ impl World {
 		tokens
 	}
 
-	fn removes(components: &HashMap<String, Component>) -> Vec<ast::TokenTree> {
+	fn removes(components: &Components) -> Vec<ast::TokenTree> {
 		let mut removes = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -226,7 +229,7 @@ impl World {
 	}
 
 	fn field_sets(
-		components: &HashMap<String, Component>
+		components: &Components
 	) -> Vec<ast::TokenTree> {
 		let mut init = Vec::new();
 
@@ -244,7 +247,7 @@ struct Entity(Vec<P<ast::Item>>);
 impl Entity {
 	fn generate(
 		context   : &ExtCtxt,
-		components: &HashMap<String, Component>,
+		components: &Components,
 	) -> Entity {
 		let field_decls = Entity::field_decls(components);
 		let field_inits = Entity::field_inits(components);
@@ -274,7 +277,7 @@ impl Entity {
 	}
 
 	fn field_decls(
-		components: &HashMap<String, Component>
+		components: &Components
 	) -> Vec<ast::TokenTree> {
 		let mut decls = Vec::new();
 
@@ -286,7 +289,7 @@ impl Entity {
 	}
 
 	fn field_inits(
-		components: &HashMap<String, Component>
+		components: &Components
 	) -> Vec<ast::TokenTree> {
 		let mut inits = Vec::new();
 
