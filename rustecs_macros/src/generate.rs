@@ -36,8 +36,9 @@ pub struct Component {
 	name    : String,
 	var_name: ast::Ident,
 	import  : Vec<ast::TokenTree>,
-	insert  : Vec<ast::TokenTree>,
-	remove  : Vec<ast::TokenTree>,
+
+	insert: Vec<ast::TokenTree>,
+	remove: Vec<ast::TokenTree>,
 
 	field_decl  : Vec<ast::TokenTree>,
 	field_import: Vec<ast::TokenTree>,
@@ -50,18 +51,9 @@ impl Component {
 	fn generate(context: &ExtCtxt, ty: ast::Ident) -> Component {
 		let var_name = ast::Ident::new(
 			token::intern(camel_to_snake_case(ty).as_slice()));
-
 		let collection = ast::Ident::new(token::intern(
 			type_to_collection_name(ty).as_slice()
 		));
-
-		let collection_decl = quote_tokens!(&*context,
-			pub $collection: ::rustecs::Components<$ty>,
-		);
-
-		let collection_init = quote_tokens!(&*context,
-			$collection: ::rustecs::components(),
-		);
 
 		let import = quote_tokens!(&*context,
 			match entity.$var_name {
@@ -76,7 +68,6 @@ impl Component {
 		let insert = quote_tokens!(&*context,
 			self.$collection.insert(id, $var_name);
 		);
-
 		let remove = quote_tokens!(&*context,
 			self.$collection.remove(&id);
 		);
@@ -84,9 +75,15 @@ impl Component {
 		let field_decl = quote_tokens!(&*context,
 			pub $var_name: Option<$ty>,
 		);
-
 		let field_import = quote_tokens!(&*context,
 			$var_name: self.$collection.find_copy(id),
+		);
+
+		let collection_decl = quote_tokens!(&*context,
+			pub $collection: ::rustecs::Components<$ty>,
+		);
+		let collection_init = quote_tokens!(&*context,
+			$collection: ::rustecs::components(),
 		);
 
 		Component {
