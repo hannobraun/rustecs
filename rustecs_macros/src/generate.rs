@@ -112,12 +112,12 @@ impl World {
 		context   : &ExtCtxt,
 		components: &HashMap<String, Component>,
 	) -> World {
-		let decls        = World::component_decls(components);
-		let inits        = World::component_inits(components);
-		let imports      = World::imports(components);
-		let removes      = World::removes(components);
-		let entity_decls = World::entity_decls(components);
-		let entity_init  = World::entity_init(components);
+		let collection_decls = World::collection_decls(components);
+		let inits            = World::component_inits(components);
+		let imports          = World::imports(components);
+		let removes          = World::removes(components);
+		let entity_decls     = World::entity_decls(components);
+		let entity_init      = World::entity_init(components);
 
 		let structure = quote_item!(&*context,
 			#[deriving(Show)]
@@ -125,7 +125,7 @@ impl World {
 				entities: ::std::collections::HashSet<::rustecs::EntityId>,
 				next_id : ::rustecs::EntityId,
 
-				$decls
+				$collection_decls
 			}
 		);
 
@@ -190,7 +190,7 @@ impl World {
 		World(items)
 	}
 
-	fn component_decls(
+	fn collection_decls(
 		components: &HashMap<String, Component>
 	) -> Vec<ast::TokenTree> {
 		let mut tokens = vec!();
