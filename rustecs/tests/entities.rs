@@ -58,7 +58,7 @@ fn it_should_destroy_entities() {
 			.with_score(100)
 	);
 
-	world.destroy_entity(id);
+	world.remove_entity(id);
 
 	assert_eq!(0, world.positions.len());
 	assert_eq!(0, world.scores.len());

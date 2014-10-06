@@ -187,7 +187,7 @@ impl World {
 					id
 				}
 
-				pub fn destroy_entity(&mut self, id: ::rustecs::EntityId) {
+				pub fn remove_entity(&mut self, id: ::rustecs::EntityId) {
 					self.entities.remove(&id);
 
 					$removes
