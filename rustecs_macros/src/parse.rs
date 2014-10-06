@@ -18,6 +18,7 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 }
 
 
+#[deriving(Show)]
 pub struct World {
 	pub components         : Vec<ast::Ident>,
 	pub entity_constructors: Vec<EntityConstructor>,
@@ -68,6 +69,7 @@ impl World {
 }
 
 
+#[deriving(Show)]
 pub struct EntityConstructor {
 	pub name       : ast::Ident,
 	pub components : Vec<ast::Ident>,
@@ -113,6 +115,7 @@ impl EntityConstructor {
 	}
 }
 
+#[deriving(Show)]
 pub enum ConstructorImpl {
 	Inline(P<ast::Block>),
 	External(ast::Ident),
