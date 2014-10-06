@@ -118,7 +118,7 @@ impl World {
 		let collection_inits = World::collection_inits(components);
 		let imports          = World::imports(components);
 		let removes          = World::removes(components);
-		let entity_decls     = World::entity_decls(components);
+		let field_decls      = World::field_decls(components);
 		let entity_init      = World::entity_init(components);
 
 		let structure = quote_item!(&*context,
@@ -180,7 +180,7 @@ impl World {
 		let entity_struct = quote_item!(&*context,
 			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
 			pub struct Entity {
-				$entity_decls
+				$field_decls
 			}
 		);
 
@@ -236,7 +236,7 @@ impl World {
 		removes
 	}
 
-	fn entity_decls(
+	fn field_decls(
 		components: &HashMap<String, Component>
 	) -> Vec<ast::TokenTree> {
 		let mut decls = Vec::new();
