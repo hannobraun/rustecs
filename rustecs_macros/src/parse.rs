@@ -7,7 +7,7 @@ use syntax::parse::token;
 use syntax::ptr::P;
 
 
-pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<EntityConstructor> {
+pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 	let mut parser = parse::new_parser_from_tts(
 		context.parse_sess(),
 		context.cfg(),
@@ -24,7 +24,14 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> Vec<EntityCons
 		}
 	}
 
-	entities
+	World {
+		entity_constructors: entities
+	}
+}
+
+
+pub struct World {
+	pub entity_constructors: Vec<EntityConstructor>,
 }
 
 
