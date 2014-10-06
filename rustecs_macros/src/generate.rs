@@ -113,7 +113,7 @@ impl World {
 		components: &HashMap<String, Component>,
 	) -> World {
 		let collection_decls = World::collection_decls(components);
-		let inits            = World::component_inits(components);
+		let collection_inits = World::collection_inits(components);
 		let imports          = World::imports(components);
 		let removes          = World::removes(components);
 		let entity_decls     = World::entity_decls(components);
@@ -135,7 +135,7 @@ impl World {
 					World {
 						entities: ::std::collections::HashSet::new(),
 						next_id : 0,
-						$inits
+						$collection_inits
 					}
 				}
 
@@ -202,7 +202,7 @@ impl World {
 		tokens
 	}
 
-	fn component_inits(
+	fn collection_inits(
 		components: &HashMap<String, Component>
 	) -> Vec<ast::TokenTree> {
 		let mut tokens = vec!();
