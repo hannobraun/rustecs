@@ -12,6 +12,7 @@ use parse;
 
 
 type Components = HashMap<String, Component>;
+type Tokens     = Vec<ast::TokenTree>;
 
 
 pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
@@ -41,15 +42,15 @@ pub struct Component {
 	name    : String,
 	var_name: ast::Ident,
 
-	insert: Vec<ast::TokenTree>,
-	remove: Vec<ast::TokenTree>,
+	insert: Tokens,
+	remove: Tokens,
 
-	field_decl: Vec<ast::TokenTree>,
-	field_init: Vec<ast::TokenTree>,
-	field_set : Vec<ast::TokenTree>,
+	field_decl: Tokens,
+	field_init: Tokens,
+	field_set : Tokens,
 
-	collection_decl: Vec<ast::TokenTree>,
-	collection_init: Vec<ast::TokenTree>,
+	collection_decl: Tokens,
+	collection_init: Tokens,
 }
 
 impl Component {
@@ -186,7 +187,7 @@ impl World {
 
 	fn collection_decls(
 		components: &Components
-	) -> Vec<ast::TokenTree> {
+	) -> Tokens {
 		let mut tokens = vec!();
 
 		for (_, component) in components.iter() {
@@ -198,7 +199,7 @@ impl World {
 
 	fn collection_inits(
 		components: &Components
-	) -> Vec<ast::TokenTree> {
+	) -> Tokens {
 		let mut tokens = vec!();
 
 		for (_, component) in components.iter() {
@@ -208,7 +209,7 @@ impl World {
 		tokens
 	}
 
-	fn inserts(components: &Components) -> Vec<ast::TokenTree> {
+	fn inserts(components: &Components) -> Tokens {
 		let mut tokens = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -218,7 +219,7 @@ impl World {
 		tokens
 	}
 
-	fn removes(components: &Components) -> Vec<ast::TokenTree> {
+	fn removes(components: &Components) -> Tokens {
 		let mut removes = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -230,7 +231,7 @@ impl World {
 
 	fn field_sets(
 		components: &Components
-	) -> Vec<ast::TokenTree> {
+	) -> Tokens {
 		let mut init = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -278,7 +279,7 @@ impl Entity {
 
 	fn field_decls(
 		components: &Components
-	) -> Vec<ast::TokenTree> {
+	) -> Tokens {
 		let mut decls = Vec::new();
 
 		for (_, component) in components.iter() {
@@ -290,7 +291,7 @@ impl Entity {
 
 	fn field_inits(
 		components: &Components
-	) -> Vec<ast::TokenTree> {
+	) -> Tokens {
 		let mut inits = Vec::new();
 
 		for (_, component) in components.iter() {
