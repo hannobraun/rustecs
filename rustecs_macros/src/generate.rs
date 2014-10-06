@@ -303,6 +303,8 @@ impl World {
 					let id = self.next_id;
 					self.next_id += 1;
 
+					self.entities.insert(id);
+
 					let world = self;
 
 					$imports
