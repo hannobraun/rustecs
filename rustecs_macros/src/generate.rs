@@ -137,14 +137,17 @@ impl World {
 					}
 				}
 
-				pub fn export_entities(&self) -> Vec<Entity> {
+				pub fn export_entities(&self) -> Vec<(::rustecs::EntityId, Entity)> {
 					self.entities
 						.iter()
 						.map(|id|
-							Entity {
-								id: *id,
-								$entity_init
-							}
+							(
+								*id,
+								Entity {
+									id: *id,
+									$entity_init
+								}
+							)
 						)
 						.collect()
 				}

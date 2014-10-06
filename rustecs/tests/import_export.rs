@@ -35,11 +35,11 @@ fn it_should_export_all_entities() {
 
 	assert_eq!(2, entities.len());
 
-	for &entity in entities.iter() {
-		if entity.id == id_1 {
+	for &(id, entity) in entities.iter() {
+		if id == id_1 {
 			assert_eq!(entity_1, entity);
 		}
-		else if entity.id == id_2 {
+		else if id == id_2 {
 			assert_eq!(entity_2, entity);
 		}
 		else {
