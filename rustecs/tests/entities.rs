@@ -9,20 +9,6 @@ extern crate rustecs;
 
 world! {
 	components Position, Score;
-
-	// Inline entity constructor. This is good for the general case, since it
-	// avoids the duplication of external entity constructors.
-	entity_constructor missile(x: f64, y: f64) -> (Position) {
-		(
-			Position(x, y),
-		)
-	}
-
-	// This specifies an entity constructor that uses an external function. Can
-	// be useful for debugging, since compiler errors inside generated code are
-	// not very useful. There's a lot of duplication between the declaration
-	// here and the external function though.
-	entity_constructor ship(score: u32) -> (Position, Score) = create_ship;
 }
 
 
@@ -30,14 +16,6 @@ world! {
 pub struct Position(f64, f64);
 
 pub type Score = u32;
-
-
-fn create_ship(score: u32) -> (Position, Score) {
-	(
-		Position(0.0, 0.0),
-		score,
-	)
-}
 
 
 #[test]
