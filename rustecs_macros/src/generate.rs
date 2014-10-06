@@ -42,6 +42,7 @@ pub struct Component {
 	remove: Vec<ast::TokenTree>,
 
 	field_decl: Vec<ast::TokenTree>,
+	field_init: Vec<ast::TokenTree>,
 	field_set : Vec<ast::TokenTree>,
 
 	collection_decl: Vec<ast::TokenTree>,
@@ -72,6 +73,9 @@ impl Component {
 		let field_decl = quote_tokens!(&*context,
 			pub $var_name: Option<$ty>,
 		);
+		let field_init = quote_tokens!(context,
+			$var_name: None,
+		);
 		let field_set = quote_tokens!(&*context,
 			$var_name: self.$collection.find_copy(id),
 		);
@@ -91,6 +95,7 @@ impl Component {
 			remove: remove,
 
 			field_decl: field_decl,
+			field_init: field_init,
 			field_set : field_set,
 
 			collection_decl: collection_decl,
@@ -242,6 +247,7 @@ impl Entity {
 		components: &HashMap<String, Component>,
 	) -> Entity {
 		let field_decls = Entity::field_decls(components);
+		let field_inits = Entity::field_inits(components);
 
 		let structure = quote_item!(&*context,
 			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
@@ -250,8 +256,19 @@ impl Entity {
 			}
 		);
 
+		let implementation = quote_item!(context,
+			impl Entity {
+				pub fn new() -> Entity {
+					Entity {
+						$field_inits
+					}
+				}
+			}
+		);
+
 		let mut items = Vec::new();
 		items.push(structure.unwrap());
+		items.push(implementation.unwrap());
 
 		Entity(items)
 	}
@@ -266,5 +283,17 @@ impl Entity {
 		}
 
 		decls
+	}
+
+	fn field_inits(
+		components: &HashMap<String, Component>
+	) -> Vec<ast::TokenTree> {
+		let mut inits = Vec::new();
+
+		for (_, component) in components.iter() {
+			inits.push_all(component.field_init.as_slice());
+		}
+
+		inits
 	}
 }
