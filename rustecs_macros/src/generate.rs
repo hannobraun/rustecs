@@ -51,6 +51,8 @@ pub struct Component {
 
 	collection_decl: Tokens,
 	collection_init: Tokens,
+
+	builder_fn: Tokens,
 }
 
 impl Component {
@@ -61,6 +63,14 @@ impl Component {
 		let collection = ast::Ident::new(token::intern(
 			type_to_collection_name(ty).as_slice()
 		));
+		let builder_name = {
+			let mut builder_name = "with_".to_string();
+			builder_name.push_str(var_name.as_str());
+
+			ast::Ident::new(token::intern(
+				builder_name.as_slice()
+			))
+		};
 
 		let insert = quote_tokens!(&*context,
 			match entity.$var_name {
@@ -92,6 +102,13 @@ impl Component {
 			$collection: ::rustecs::components(),
 		);
 
+		let builder_fn = quote_tokens!(context,
+			pub fn $builder_name(mut self, component: $ty) -> Entity {
+				self.$var_name = Some(component);
+				self
+			}
+		);
+
 		Component {
 			name    : token::get_ident(ty).to_string(),
 			var_name: var_name,
@@ -105,6 +122,8 @@ impl Component {
 
 			collection_decl: collection_decl,
 			collection_init: collection_init,
+
+			builder_fn: builder_fn,
 		}
 	}
 }
@@ -241,6 +260,7 @@ impl Entity {
 	fn generate(context: &ExtCtxt, components: &Components) -> Entity {
 		let field_decls = Entity::field_decls(components);
 		let field_inits = Entity::field_inits(components);
+		let builder_fns = Entity::builder_fns(components);
 
 		let structure = quote_item!(&*context,
 			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
@@ -256,6 +276,8 @@ impl Entity {
 						$field_inits
 					}
 				}
+
+				$builder_fns
 			}
 		);
 
@@ -284,5 +306,15 @@ impl Entity {
 		}
 
 		inits
+	}
+
+	fn builder_fns(components: &Components) -> Tokens {
+		let mut fns = Vec::new();
+
+		for (_, component) in components.iter() {
+			fns.push_all(component.builder_fn.as_slice());
+		}
+
+		fns
 	}
 }
