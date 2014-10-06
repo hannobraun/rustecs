@@ -15,10 +15,10 @@ use parse::{
 };
 
 
-pub fn items(context: &ExtCtxt, ecs: &parse::World) -> Vec<P<ast::Item>> {
-	let components = Component::generate_components(context, &ecs.entity_constructors);
+pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
+	let components = Component::generate_components(context, &world.entity_constructors);
 
-	let entities: Vec<EntityConstructor> = ecs.entity_constructors
+	let entities: Vec<EntityConstructor> = world.entity_constructors
 		.iter()
 		.map(|entity|
 			EntityConstructor::generate(context, entity, &components))
