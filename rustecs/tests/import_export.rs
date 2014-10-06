@@ -75,10 +75,10 @@ fn it_should_import_entities() {
 	let mut world = World::new();
 
 	let entity = Entity {
-		id       : 5,
+		id       : 0, // ignored
 		component: Some(8),
 	};
-	world.import_entity(entity);
+	world.import_entity(5, entity);
 
 	assert_eq!(1, world.components.len());
 	assert_eq!(8, world.components[5]);

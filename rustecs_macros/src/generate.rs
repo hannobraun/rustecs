@@ -168,8 +168,7 @@ impl World {
 						.collect()
 				}
 
-				pub fn import_entity(&mut self, entity: Entity) {
-					let id = entity.id;
+				pub fn import_entity(&mut self, id: ::rustecs::EntityId, entity: Entity) {
 					self.entities.insert(id);
 					let world = self;
 					$imports
