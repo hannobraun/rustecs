@@ -27,7 +27,22 @@ impl World {
 		let mut entities = Vec::new();
 
 		loop {
-			entities.push(EntityConstructor::parse(parser));
+			let declaration = parser.parse_ident();
+			match declaration.as_str() {
+				"entity_constructor" =>
+					entities.push(EntityConstructor::parse(parser)),
+
+				_ =>
+					parser.fatal(
+						format!(
+							"Unexpected declaration: {}",
+							declaration.as_str(),
+						)
+						.as_slice()
+					)
+			}
+
+			
 
 			if parser.eat(&token::EOF) {
 				break;
@@ -50,17 +65,6 @@ pub struct EntityConstructor {
 
 impl EntityConstructor {
 	fn parse(parser: &mut Parser) -> EntityConstructor {
-		let declaration_type = parser.parse_ident();
-		if declaration_type.as_str() != "entity_constructor" {
-			parser.fatal(
-				format!(
-					"Expected entity_constructor, found {}",
-					declaration_type.as_str(),
-				)
-				.as_slice()
-			);
-		}
-
 		let name = parser.parse_ident();
 
 		let args = parser.parse_unspanned_seq(
