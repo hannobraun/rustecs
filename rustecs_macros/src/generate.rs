@@ -72,7 +72,7 @@ impl Component {
 			))
 		};
 
-		let insert = quote_tokens!(&*context,
+		let insert = quote_tokens!(context,
 			match entity.$var_name {
 				Some(component) => {
 					let _ = world.$collection.insert(id, component);
@@ -81,24 +81,24 @@ impl Component {
 					()
 			}
 		);
-		let remove = quote_tokens!(&*context,
+		let remove = quote_tokens!(context,
 			self.$collection.remove(&id);
 		);
 
-		let field_decl = quote_tokens!(&*context,
+		let field_decl = quote_tokens!(context,
 			pub $var_name: Option<$ty>,
 		);
 		let field_init = quote_tokens!(context,
 			$var_name: None,
 		);
-		let field_set = quote_tokens!(&*context,
+		let field_set = quote_tokens!(context,
 			$var_name: self.$collection.find_copy(id),
 		);
 
-		let collection_decl = quote_tokens!(&*context,
+		let collection_decl = quote_tokens!(context,
 			pub $collection: ::rustecs::Components<$ty>,
 		);
-		let collection_init = quote_tokens!(&*context,
+		let collection_init = quote_tokens!(context,
 			$collection: ::rustecs::components(),
 		);
 
@@ -139,7 +139,7 @@ impl World {
 		let removes          = World::removes(components);
 		let field_sets       = World::field_sets(components);
 
-		let structure = quote_item!(&*context,
+		let structure = quote_item!(context,
 			#[deriving(Show)]
 			pub struct World {
 				entities: ::std::collections::HashSet<::rustecs::EntityId>,
@@ -149,7 +149,7 @@ impl World {
 			}
 		);
 
-		let implementation = quote_item!(&*context,
+		let implementation = quote_item!(context,
 			impl World {
 				pub fn new() -> World {
 					World {
@@ -262,7 +262,7 @@ impl Entity {
 		let field_inits = Entity::field_inits(components);
 		let builder_fns = Entity::builder_fns(components);
 
-		let structure = quote_item!(&*context,
+		let structure = quote_item!(context,
 			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
 			pub struct Entity {
 				$field_decls
