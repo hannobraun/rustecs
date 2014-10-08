@@ -45,9 +45,9 @@ fn it_should_export_all_entities() {
 fn it_should_import_entities() {
 	let mut world = World::new();
 
-	let id = 5;
-	world.import_entity(id, Entity::new().with_component(8));
+	let entity_id = 5;
+	world.import_entity(entity_id, Entity::new().with_component(8));
 
 	assert_eq!(1, world.components.len());
-	assert_eq!(8, world.components[id]);
+	assert_eq!(8, world.components[entity_id]);
 }
