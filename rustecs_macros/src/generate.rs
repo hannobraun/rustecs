@@ -166,22 +166,6 @@ impl World {
 					}
 				}
 
-				pub fn export_entities(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
-					self.entities
-						.iter()
-						.map(|id|
-							(*id, Entity { $field_sets })
-						)
-						.collect()
-				}
-
-				pub fn import_entity(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
-					self.entities.insert(id);
-
-					let world = self;
-					$inserts
-				}
-
 				pub fn add_entity(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 1;
@@ -194,10 +178,26 @@ impl World {
 					id
 				}
 
+				pub fn import_entity(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
+					self.entities.insert(id);
+
+					let world = self;
+					$inserts
+				}
+
 				pub fn remove_entity(&mut self, id: _r::rustecs::EntityId) {
 					self.entities.remove(&id);
 
 					$removes
+				}
+
+				pub fn export_entities(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
+					self.entities
+						.iter()
+						.map(|id|
+							(*id, Entity { $field_sets })
+						)
+						.collect()
 				}
 			}
 		);
