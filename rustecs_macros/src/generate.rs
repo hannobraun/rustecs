@@ -16,6 +16,12 @@ type Tokens     = Vec<ast::TokenTree>;
 
 
 pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
+	let extern_crate_rustecs = quote_item!(context,
+		mod _r {
+			extern crate rustecs;
+		}
+	);
+
 	let components: Components = world.components
 		.iter()
 		.map(|&component|
@@ -30,6 +36,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 	let entity = Entity::generate(context, &components);
 
 	let mut items = Vec::new();
+	items.push_all(vec![extern_crate_rustecs.unwrap()].as_slice());
 	items.push_all(world.0.as_slice());
 	items.push_all(entity.0.as_slice());
 
@@ -96,10 +103,10 @@ impl Component {
 		);
 
 		let collection_decl = quote_tokens!(context,
-			pub $collection: ::rustecs::Components<$ty>,
+			pub $collection: _r::rustecs::Components<$ty>,
 		);
 		let collection_init = quote_tokens!(context,
-			$collection: ::rustecs::components(),
+			$collection: _r::rustecs::components(),
 		);
 
 		let builder_fn = quote_tokens!(context,
@@ -142,8 +149,8 @@ impl World {
 		let structure = quote_item!(context,
 			#[deriving(Show)]
 			pub struct World {
-				entities: ::std::collections::HashSet<::rustecs::EntityId>,
-				next_id : ::rustecs::EntityId,
+				entities: ::std::collections::HashSet<_r::rustecs::EntityId>,
+				next_id : _r::rustecs::EntityId,
 
 				$collection_decls
 			}
@@ -159,7 +166,7 @@ impl World {
 					}
 				}
 
-				pub fn export_entities(&self) -> Vec<(::rustecs::EntityId, Entity)> {
+				pub fn export_entities(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
 					self.entities
 						.iter()
 						.map(|id|
@@ -168,14 +175,14 @@ impl World {
 						.collect()
 				}
 
-				pub fn import_entity(&mut self, id: ::rustecs::EntityId, entity: Entity) {
+				pub fn import_entity(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
 					self.entities.insert(id);
 
 					let world = self;
 					$inserts
 				}
 
-				pub fn add_entity(&mut self, entity: Entity) -> ::rustecs::EntityId {
+				pub fn add_entity(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 1;
 
@@ -187,7 +194,7 @@ impl World {
 					id
 				}
 
-				pub fn remove_entity(&mut self, id: ::rustecs::EntityId) {
+				pub fn remove_entity(&mut self, id: _r::rustecs::EntityId) {
 					self.entities.remove(&id);
 
 					$removes
