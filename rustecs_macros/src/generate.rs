@@ -32,7 +32,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 		)
 		.collect();
 
-	let world  = World::generate(context, &components);
+	let world  = World::generate(context, world.name, &components);
 	let entity = Entity::generate(context, &components);
 
 	let mut items = Vec::new();
@@ -139,7 +139,11 @@ impl Component {
 struct World(Vec<P<ast::Item>>);
 
 impl World {
-	fn generate(context: &ExtCtxt, components: &Components) -> World {
+	fn generate(
+		context   : &ExtCtxt,
+		name      : ast::Ident,
+		components: &Components,
+	) -> World {
 		let collection_decls = World::collection_decls(components);
 		let collection_inits = World::collection_inits(components);
 		let inserts          = World::inserts(components);
@@ -148,7 +152,7 @@ impl World {
 
 		let structure = quote_item!(context,
 			#[deriving(Show)]
-			pub struct Entities {
+			pub struct $name {
 				entities: ::std::collections::HashSet<_r::rustecs::EntityId>,
 				next_id : _r::rustecs::EntityId,
 
@@ -157,9 +161,9 @@ impl World {
 		);
 
 		let implementation = quote_item!(context,
-			impl Entities {
-				pub fn new() -> Entities {
-					Entities {
+			impl $name {
+				pub fn new() -> $name {
+					$name {
 						entities: ::std::collections::HashSet::new(),
 						next_id : 0,
 						$collection_inits

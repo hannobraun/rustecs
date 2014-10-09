@@ -18,12 +18,16 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 
 #[deriving(Show)]
 pub struct World {
+	pub name      : ast::Ident,
 	pub components: Vec<ast::Ident>,
 }
 
 impl World {
 	fn parse(parser: &mut Parser) -> World {
 		let mut components = Vec::new();
+
+		let name = parser.parse_ident();
+		parser.expect(&token::COMMA);
 
 		loop {
 			let declaration = parser.parse_ident();
@@ -55,6 +59,7 @@ impl World {
 		}
 
 		World {
+			name      : name,
 			components: components,
 		}
 	}
