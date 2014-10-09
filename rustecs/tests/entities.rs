@@ -19,46 +19,46 @@ pub type Score = u32;
 
 #[test]
 fn it_should_create_entities() {
-	let mut world = MyEntities::new();
+	let mut entities = MyEntities::new();
 
-	assert_eq!(0, world.positions.len());
-	assert_eq!(0, world.scores.len());
+	assert_eq!(0, entities.positions.len());
+	assert_eq!(0, entities.scores.len());
 
-	let missile_id = world.add_entity(
+	let missile_id = entities.add_entity(
 		Entity::new()
 			.with_position(Position(8.0, 12.0))
 	);
 
-	assert_eq!(1, world.positions.len());
-	assert_eq!(0, world.scores.len());
+	assert_eq!(1, entities.positions.len());
+	assert_eq!(0, entities.scores.len());
 
-	assert_eq!(Position(8.0, 12.0), world.positions[missile_id]);
+	assert_eq!(Position(8.0, 12.0), entities.positions[missile_id]);
 
-	let ship_id = world.add_entity(
+	let ship_id = entities.add_entity(
 		Entity::new()
 			.with_position(Position(0.0, 0.0))
 			.with_score(100)
 	);
 
-	assert_eq!(2, world.positions.len());
-	assert_eq!(1, world.scores.len());
+	assert_eq!(2, entities.positions.len());
+	assert_eq!(1, entities.scores.len());
 
-	assert_eq!(Position(0.0, 0.0), world.positions[ship_id]);
-	assert_eq!(100               , world.scores[ship_id]);
+	assert_eq!(Position(0.0, 0.0), entities.positions[ship_id]);
+	assert_eq!(100               , entities.scores[ship_id]);
 }
 
 #[test]
 fn it_should_destroy_entities() {
-	let mut world = MyEntities::new();
+	let mut entities = MyEntities::new();
 
-	let id = world.add_entity(
+	let id = entities.add_entity(
 		Entity::new()
 			.with_position(Position(0.0, 0.0))
 			.with_score(100)
 	);
 
-	world.remove_entity(id);
+	entities.remove_entity(id);
 
-	assert_eq!(0, world.positions.len());
-	assert_eq!(0, world.scores.len());
+	assert_eq!(0, entities.positions.len());
+	assert_eq!(0, entities.scores.len());
 }
