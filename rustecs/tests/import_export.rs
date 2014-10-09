@@ -24,7 +24,7 @@ fn it_should_export_all_entities() {
 	let id_1 = entities.add(entity_1);
 	let id_2 = entities.add(entity_2);
 
-	let entities = entities.export_entities();
+	let entities = entities.export();
 
 	assert_eq!(2, entities.len());
 

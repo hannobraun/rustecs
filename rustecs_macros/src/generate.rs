@@ -195,7 +195,7 @@ impl World {
 					$removes
 				}
 
-				pub fn export_entities(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
+				pub fn export(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
 					self.entities
 						.iter()
 						.map(|id|
