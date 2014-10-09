@@ -3,7 +3,11 @@
 
 extern crate serialize;
 
+extern crate rustecs;
 #[phase(plugin)] extern crate rustecs_macros;
+
+
+use rustecs::Entities;
 
 
 world! { MyEntities,
@@ -19,7 +23,7 @@ pub type Score = u32;
 
 #[test]
 fn it_should_create_entities() {
-	let mut entities = MyEntities::new();
+	let mut entities: MyEntities = Entities::new();
 
 	assert_eq!(0, entities.positions.len());
 	assert_eq!(0, entities.scores.len());
@@ -49,7 +53,7 @@ fn it_should_create_entities() {
 
 #[test]
 fn it_should_destroy_entities() {
-	let mut entities = MyEntities::new();
+	let mut entities: MyEntities = Entities::new();
 
 	let id = entities.add(
 		Entity::new()

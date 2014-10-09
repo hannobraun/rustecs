@@ -161,8 +161,8 @@ impl World {
 		);
 
 		let implementation = quote_item!(context,
-			impl $name {
-				pub fn new() -> $name {
+			impl _r::rustecs::Entities<Entity> for $name {
+				fn new() -> $name {
 					$name {
 						entities: ::std::collections::HashSet::new(),
 						next_id : 0,
@@ -170,7 +170,7 @@ impl World {
 					}
 				}
 
-				pub fn add(&mut self, entity: Entity) -> _r::rustecs::EntityId {
+				fn add(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 1;
 
@@ -182,20 +182,20 @@ impl World {
 					id
 				}
 
-				pub fn import(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
+				fn import(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
 					self.entities.insert(id);
 
 					let world = self;
 					$inserts
 				}
 
-				pub fn remove(&mut self, id: _r::rustecs::EntityId) {
+				fn remove(&mut self, id: _r::rustecs::EntityId) {
 					self.entities.remove(&id);
 
 					$removes
 				}
 
-				pub fn export(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
+				fn export(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
 					self.entities
 						.iter()
 						.map(|id|
