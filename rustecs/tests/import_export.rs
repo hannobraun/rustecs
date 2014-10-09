@@ -46,7 +46,7 @@ fn it_should_import_entities() {
 	let mut entities = MyEntities::new();
 
 	let entity_id = 5;
-	entities.import_entity(entity_id, Entity::new().with_component(8));
+	entities.import(entity_id, Entity::new().with_component(8));
 
 	assert_eq!(1, entities.components.len());
 	assert_eq!(8, entities.components[entity_id]);

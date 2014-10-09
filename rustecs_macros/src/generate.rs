@@ -182,7 +182,7 @@ impl World {
 					id
 				}
 
-				pub fn import_entity(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
+				pub fn import(&mut self, id: _r::rustecs::EntityId, entity: Entity) {
 					self.entities.insert(id);
 
 					let world = self;
