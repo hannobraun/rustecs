@@ -170,7 +170,7 @@ impl World {
 					}
 				}
 
-				pub fn add_entity(&mut self, entity: Entity) -> _r::rustecs::EntityId {
+				pub fn add(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 1;
 

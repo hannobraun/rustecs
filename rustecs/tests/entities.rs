@@ -24,7 +24,7 @@ fn it_should_create_entities() {
 	assert_eq!(0, entities.positions.len());
 	assert_eq!(0, entities.scores.len());
 
-	let missile_id = entities.add_entity(
+	let missile_id = entities.add(
 		Entity::new()
 			.with_position(Position(8.0, 12.0))
 	);
@@ -34,7 +34,7 @@ fn it_should_create_entities() {
 
 	assert_eq!(Position(8.0, 12.0), entities.positions[missile_id]);
 
-	let ship_id = entities.add_entity(
+	let ship_id = entities.add(
 		Entity::new()
 			.with_position(Position(0.0, 0.0))
 			.with_score(100)
@@ -51,7 +51,7 @@ fn it_should_create_entities() {
 fn it_should_destroy_entities() {
 	let mut entities = MyEntities::new();
 
-	let id = entities.add_entity(
+	let id = entities.add(
 		Entity::new()
 			.with_position(Position(0.0, 0.0))
 			.with_score(100)
