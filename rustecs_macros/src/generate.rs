@@ -148,7 +148,7 @@ impl World {
 
 		let structure = quote_item!(context,
 			#[deriving(Show)]
-			pub struct World {
+			pub struct Entities {
 				entities: ::std::collections::HashSet<_r::rustecs::EntityId>,
 				next_id : _r::rustecs::EntityId,
 
@@ -157,9 +157,9 @@ impl World {
 		);
 
 		let implementation = quote_item!(context,
-			impl World {
-				pub fn new() -> World {
-					World {
+			impl Entities {
+				pub fn new() -> Entities {
+					Entities {
 						entities: ::std::collections::HashSet::new(),
 						next_id : 0,
 						$collection_inits

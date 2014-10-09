@@ -19,7 +19,7 @@ pub type Score = u32;
 
 #[test]
 fn it_should_create_entities() {
-	let mut world = World::new();
+	let mut world = Entities::new();
 
 	assert_eq!(0, world.positions.len());
 	assert_eq!(0, world.scores.len());
@@ -49,7 +49,7 @@ fn it_should_create_entities() {
 
 #[test]
 fn it_should_destroy_entities() {
-	let mut world = World::new();
+	let mut world = Entities::new();
 
 	let id = world.add_entity(
 		Entity::new()

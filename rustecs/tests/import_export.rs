@@ -16,7 +16,7 @@ pub type Component = u32;
 
 #[test]
 fn it_should_export_all_entities() {
-	let mut world = World::new();
+	let mut world = Entities::new();
 
 	let entity_1 = Entity::new().with_component(5);
 	let entity_2 = Entity::new().with_component(8);
@@ -43,7 +43,7 @@ fn it_should_export_all_entities() {
 
 #[test]
 fn it_should_import_entities() {
-	let mut world = World::new();
+	let mut world = Entities::new();
 
 	let entity_id = 5;
 	world.import_entity(entity_id, Entity::new().with_component(8));
