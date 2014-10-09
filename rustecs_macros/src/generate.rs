@@ -189,7 +189,7 @@ impl World {
 					$inserts
 				}
 
-				pub fn remove_entity(&mut self, id: _r::rustecs::EntityId) {
+				pub fn remove(&mut self, id: _r::rustecs::EntityId) {
 					self.entities.remove(&id);
 
 					$removes

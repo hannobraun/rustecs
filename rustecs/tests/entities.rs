@@ -57,7 +57,7 @@ fn it_should_destroy_entities() {
 			.with_score(100)
 	);
 
-	entities.remove_entity(id);
+	entities.remove(id);
 
 	assert_eq!(0, entities.positions.len());
 	assert_eq!(0, entities.scores.len());
