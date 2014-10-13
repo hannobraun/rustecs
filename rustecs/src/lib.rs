@@ -23,7 +23,6 @@ pub trait Entities<E> {
 pub struct Control<E> {
 	next_id: EntityId,
 
-	pub added   : Vec<E>,
 	pub imported: Vec<(EntityId, E)>,
 	pub removed : Vec<EntityId>,
 }
@@ -33,7 +32,6 @@ impl<E: Copy> Control<E> {
 		Control {
 			next_id: 1, // generate odd ids to avoid collisions
 
-			added   : Vec::new(),
 			imported: Vec::new(),
 			removed : Vec::new(),
 		}
@@ -56,9 +54,6 @@ impl<E: Copy> Control<E> {
 	}
 
 	pub fn apply<Es: Entities<E>>(&mut self, entities: &mut Es) {
-		for &entity in self.added.iter() {
-			entities.add(entity);
-		}
 		for &(id, entity) in self.imported.iter() {
 			entities.import(id, entity);
 		}
