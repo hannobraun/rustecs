@@ -21,17 +21,15 @@ pub trait Entities<E> {
 
 
 pub struct Control<E> {
-	next_id: EntityId,
-
-	pub imported: Vec<(EntityId, E)>,
-	pub removed : Vec<EntityId>,
+	next_id : EntityId,
+	imported: Vec<(EntityId, E)>,
+	removed : Vec<EntityId>,
 }
 
 impl<E: Copy> Control<E> {
 	pub fn new() -> Control<E> {
 		Control {
-			next_id: 1, // generate odd ids to avoid collisions
-
+			next_id : 1, // generate odd ids to avoid collisions
 			imported: Vec::new(),
 			removed : Vec::new(),
 		}
