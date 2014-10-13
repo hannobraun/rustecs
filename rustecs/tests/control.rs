@@ -93,3 +93,18 @@ fn it_should_apply_adds_only_once() {
 
 	assert_eq!(0, entities.components.len());
 }
+
+#[test]
+fn it_should_apply_removes_only_once() {
+	let mut entities = MyEntities::new();
+	let mut control  = Control::new();
+
+	let id = entities.add(Entity::new().with_component(5));
+
+	control.remove(id);
+	control.apply(&mut entities);
+	entities.import(id, Entity::new().with_component(5));
+	control.apply(&mut entities);
+
+	assert_eq!(1, entities.components.len());
+}

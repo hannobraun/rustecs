@@ -60,5 +60,6 @@ impl<E: Copy> Control<E> {
 		}
 
 		self.imported.clear();
+		self.removed.clear();
 	}
 }
