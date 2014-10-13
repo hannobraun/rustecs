@@ -21,13 +21,15 @@ pub trait Entities<E> {
 
 
 pub struct Control<E> {
-	pub added: Vec<E>,
+	pub added   : Vec<E>,
+	pub imported: Vec<(EntityId, E)>,
 }
 
 impl<E: Copy> Control<E> {
 	pub fn new() -> Control<E> {
 		Control {
-			added: Vec::new(),
+			added   : Vec::new(),
+			imported: Vec::new(),
 		}
 	}
 
@@ -35,9 +37,16 @@ impl<E: Copy> Control<E> {
 		self.added.push(entity);
 	}
 
+	pub fn import(&mut self, id: EntityId, entity: E) {
+		self.imported.push((id, entity));
+	}
+
 	pub fn apply<Es: Entities<E>>(&mut self, entities: &mut Es) {
 		for &entity in self.added.iter() {
 			entities.add(entity);
+		}
+		for &(id, entity) in self.imported.iter() {
+			entities.import(id, entity);
 		}
 	}
 }
