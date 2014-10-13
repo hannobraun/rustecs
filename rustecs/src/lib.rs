@@ -18,3 +18,26 @@ pub trait Entities<E> {
 
 	fn export(&self) -> Vec<(EntityId, E)>;
 }
+
+
+pub struct Control<E> {
+	pub added: Vec<E>,
+}
+
+impl<E: Copy> Control<E> {
+	pub fn new() -> Control<E> {
+		Control {
+			added: Vec::new(),
+		}
+	}
+
+	pub fn add(&mut self, entity: E) {
+		self.added.push(entity);
+	}
+
+	pub fn apply<Es: Entities<E>>(&mut self, entities: &mut Es) {
+		for &entity in self.added.iter() {
+			entities.add(entity);
+		}
+	}
+}
