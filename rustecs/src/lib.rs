@@ -58,5 +58,7 @@ impl<E: Copy> Control<E> {
 		for &id in self.removed.iter() {
 			entities.remove(id);
 		}
+
+		self.imported.clear();
 	}
 }

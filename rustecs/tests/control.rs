@@ -79,3 +79,17 @@ fn it_should_return_a_unique_id_from_add() {
 	assert_eq!(3, entities.components.len());
 	assert_eq!(8, entities.components[id]);
 }
+
+#[test]
+fn it_should_apply_adds_only_once() {
+	let mut entities = MyEntities::new();
+	let mut control  = Control::new();
+
+	let id = control.add(Entity::new().with_component(5));
+
+	control.apply(&mut entities);
+	entities.remove(id);
+	control.apply(&mut entities);
+
+	assert_eq!(0, entities.components.len());
+}
