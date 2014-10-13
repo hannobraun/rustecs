@@ -176,7 +176,7 @@ impl World {
 			impl _r::rustecs::Entities<Entity> for $name {
 				fn add(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
-					self.next_id += 1;
+					self.next_id += 2;
 
 					self.entities.insert(id);
 
