@@ -21,6 +21,8 @@ pub trait Entities<E> {
 
 
 pub struct Control<E> {
+	next_id: EntityId,
+
 	pub added   : Vec<E>,
 	pub imported: Vec<(EntityId, E)>,
 	pub removed : Vec<EntityId>,
@@ -29,14 +31,20 @@ pub struct Control<E> {
 impl<E: Copy> Control<E> {
 	pub fn new() -> Control<E> {
 		Control {
+			next_id: 1, // generate odd ids to avoid collisions
+
 			added   : Vec::new(),
 			imported: Vec::new(),
 			removed : Vec::new(),
 		}
 	}
 
-	pub fn add(&mut self, entity: E) {
-		self.added.push(entity);
+	pub fn add(&mut self, entity: E) -> EntityId {
+		let id = self.next_id;
+		self.next_id += 2;
+
+		self.imported.push((id, entity));
+		id
 	}
 
 	pub fn import(&mut self, id: EntityId, entity: E) {
