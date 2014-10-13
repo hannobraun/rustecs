@@ -23,6 +23,7 @@ pub trait Entities<E> {
 pub struct Control<E> {
 	pub added   : Vec<E>,
 	pub imported: Vec<(EntityId, E)>,
+	pub removed : Vec<EntityId>,
 }
 
 impl<E: Copy> Control<E> {
@@ -30,6 +31,7 @@ impl<E: Copy> Control<E> {
 		Control {
 			added   : Vec::new(),
 			imported: Vec::new(),
+			removed : Vec::new(),
 		}
 	}
 
@@ -41,12 +43,19 @@ impl<E: Copy> Control<E> {
 		self.imported.push((id, entity));
 	}
 
+	pub fn remove(&mut self, id: EntityId) {
+		self.removed.push(id);
+	}
+
 	pub fn apply<Es: Entities<E>>(&mut self, entities: &mut Es) {
 		for &entity in self.added.iter() {
 			entities.add(entity);
 		}
 		for &(id, entity) in self.imported.iter() {
 			entities.import(id, entity);
+		}
+		for &id in self.removed.iter() {
+			entities.remove(id);
 		}
 	}
 }

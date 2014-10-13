@@ -48,3 +48,19 @@ fn it_should_import_entities_after_apply() {
 	assert_eq!(1, entities.components.len());
 	assert_eq!(5, entities.components[3]);
 }
+
+#[test]
+fn it_should_remove_entities_after_apply() {
+	let mut entities = MyEntities::new();
+	let mut control  = Control::new();
+
+	let id = entities.add(Entity::new().with_component(5));
+
+	control.remove(id);
+
+	assert_eq!(1, entities.components.len());
+
+	control.apply(&mut entities);
+
+	assert_eq!(0, entities.components.len());
+}
