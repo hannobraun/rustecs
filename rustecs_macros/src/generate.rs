@@ -161,15 +161,19 @@ impl World {
 		);
 
 		let implementation = quote_item!(context,
-			impl _r::rustecs::Entities<Entity> for $name {
-				fn new() -> $name {
+			impl $name {
+				pub fn new() -> $name {
 					$name {
 						entities: ::std::collections::HashSet::new(),
 						next_id : 0,
 						$collection_inits
 					}
 				}
+			}
+		);
 
+		let trait_impl = quote_item!(context,
+			impl _r::rustecs::Entities<Entity> for $name {
 				fn add(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 1;
@@ -209,6 +213,7 @@ impl World {
 		let mut items = Vec::new();
 		items.push(structure.unwrap());
 		items.push(implementation.unwrap());
+		items.push(trait_impl.unwrap());
 
 		World(items)
 	}
