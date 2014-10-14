@@ -1,4 +1,9 @@
 language: rust
+env:
+  global:
+    - secure: IXb79dOEWLXq6ZpfONfBdWhrOs592+3CetFwAsxoGo2enWxnJ87oWSrrCho7A9FcaK3Y4doG6hIHONgCG7VQ+Jjn7TGpRNTrOXH2Sv2yaqm2fQTb9HqYh9zFbG7XIppMWDaYEws3tRqXlm3fRmNb9wboz/o9GRnb/FihBCUJHJU=
 script:
   - cd rustecs
   - cargo test --verbose
+after_script:
+  - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
