@@ -1,4 +1,4 @@
-# Rustecs
+# Rustecs [![Build Status](https://travis-ci.org/hannobraun/rustecs.svg?branch=master)](https://travis-ci.org/hannobraun/rustecs)
 
 ## About
 
