@@ -26,7 +26,7 @@ pub struct Control<E> {
 	removed : Vec<EntityId>,
 }
 
-impl<E: Copy> Control<E> {
+impl<E: Clone> Control<E> {
 	pub fn new() -> Control<E> {
 		Control {
 			next_id : 1, // generate odd ids to avoid collisions
@@ -52,8 +52,8 @@ impl<E: Copy> Control<E> {
 	}
 
 	pub fn apply<Es: Entities<E>>(&mut self, entities: &mut Es) {
-		for &(id, entity) in self.imported.iter() {
-			entities.import(id, entity);
+		for &(id, ref entity) in self.imported.iter() {
+			entities.import(id, entity.clone());
 		}
 		for &id in self.removed.iter() {
 			entities.remove(id);
