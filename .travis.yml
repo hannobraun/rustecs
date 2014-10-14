@@ -1,7 +1,7 @@
 language: rust
 env:
   global:
-    - secure: IXb79dOEWLXq6ZpfONfBdWhrOs592+3CetFwAsxoGo2enWxnJ87oWSrrCho7A9FcaK3Y4doG6hIHONgCG7VQ+Jjn7TGpRNTrOXH2Sv2yaqm2fQTb9HqYh9zFbG7XIppMWDaYEws3tRqXlm3fRmNb9wboz/o9GRnb/FihBCUJHJU=
+    - secure: HGiC3rE+ciEr2V14atcLXZfOqQ6fStDNYN4vo9rNqqBUPhcmjC8EuQHJoaei13IHbRNgEEuw3Ajc3dRIXwY/t7gBxLIMIZ7iannrc8Pscf6wcqOi2eSjJLMVRWzh3D/ZF+Bq680NrfpdO8U7wVQK+NkwQGIGrx0tD9NhHLoHDBk=
 script:
   - cd rustecs
   - cargo test --verbose
