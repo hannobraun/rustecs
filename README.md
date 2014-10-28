@@ -279,6 +279,101 @@ just add `s` to the end). Those simple rules might not cover every case. If a
 component name is not what you might expect, please open an issue for that!
 
 
+### Adding and Removing Entities from Systems
+
+We've already learned how to add and remove entities. As you might notice,
+however, that approach won't always when adding or removing components from a
+system. Adding or removing an element from a `Components` collection while we're
+iterating over it is not safe, and the Rust compiler will prevent you from doing
+it. There's one solution however, the `Control` struct.
+
+First, let's define a simple world, which contains both players and enemies,
+both of which have a position.
+
+``` Rust
+world! {
+	components Position, Player, Enemy;
+}
+
+struct Position(f32, f32);
+
+// Enemy and Player are just markers that indicate to a system how the entity
+// should behave. They contain no data for now.
+struct Player;
+struct Enemy;
+```
+
+Here's our main function for our game. This time, we'll create a `Control`
+instance in addition to `Entities`.
+
+``` Rust
+fn main() {
+	// When we create our entities container, we'll also create a control.
+	// Please only create one control per entities container, otherwise entities
+	// created from one control might overwrite those created from another.
+	let mut entities = Entities::new();
+	let mut control  = Control::new();
+
+	// Let's imagine we create a bunch of players and enemies here. I'll not
+	// write out the code here to keep the example short.
+
+	loop {
+		// There's a simple rule in our game: If a player touches an enemy, they
+		// die. This is the system that kills the players. It'll need positions,
+		// players and enemies to know who to kill and the control to then do
+		// it.
+		kill_players(
+			&entities.positions,
+			&entities.players,
+			&entities.enemies,
+			&mut control,
+		);
+
+		// The system will use the control to kill the players, however, any
+		// changed made through a control need to applied to the entities
+		// container explicitely.
+		control.apply(&mut entities);
+
+		// Of course, in a real game we would have many more systems for moving
+		// players and enemies around and such.
+	}
+}
+```
+
+Ok, so that's how the control is used from outside the system. Let's see how it
+is used by the system to kill the players.
+
+``` Rust
+fn kill_players(
+	positions: &Components<Position>,
+	players  : &Components<Player>,
+	enemies  : &Components<Enemy>,
+	control  : &mut Control
+) {
+	// Compare the positions of all the players to the positions of all the
+	// enemies.
+	for (player_id, _) in players.iter() {
+		for (enemy_id, _) in enemies.iter() {
+			if positions[player_id] == positions[enemy_id] {
+				// They are at the same position. Kill the player!
+				control.remove(player_id);
+
+				// So far, nothing has changed. If we iterate over all the
+				// players again later, the remove player will still be there.
+				// It will only truely be removed with the call to apply in the
+				// main loop above.
+			}
+		}
+	}
+}
+```
+
+Besides removing, `Control` can also add players and more. Please take a look at
+`Control`'s
+[unit tests](https://github.com/hannobraun/rustecs/tree/master/rustecs/tests)
+for the full details.
+
+
 ### That's It!
 
 There are some additional feaures I haven't talked about here, like importing
