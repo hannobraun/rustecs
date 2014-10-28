@@ -9,7 +9,7 @@ extern crate rustecs;
 
 use rustecs::{
 	Control,
-	Entities,
+	EntityContainer,
 };
 
 

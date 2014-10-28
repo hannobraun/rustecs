@@ -7,7 +7,7 @@ extern crate rustecs;
 #[phase(plugin)] extern crate rustecs_macros;
 
 
-use rustecs::Entities;
+use rustecs::EntityContainer;
 
 
 world! { MyEntities,

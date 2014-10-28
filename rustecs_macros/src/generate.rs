@@ -173,7 +173,7 @@ impl World {
 		);
 
 		let trait_impl = quote_item!(context,
-			impl _r::rustecs::Entities<Entity> for $name {
+			impl _r::rustecs::EntityContainer<Entity> for $name {
 				fn add(&mut self, entity: Entity) -> _r::rustecs::EntityId {
 					let id = self.next_id;
 					self.next_id += 2;

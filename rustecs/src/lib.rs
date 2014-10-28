@@ -11,7 +11,7 @@ pub fn components<T>() -> Components<T> {
 }
 
 
-pub trait Entities<E> {
+pub trait EntityContainer<E> {
 	fn add(&mut self, entity: E) -> EntityId;
 	fn import(&mut self, id: EntityId, entity: E);
 	fn remove(&mut self, id: EntityId);
@@ -51,7 +51,7 @@ impl<E: Clone> Control<E> {
 		self.removed.push(id);
 	}
 
-	pub fn apply<Es: Entities<E>>(&mut self, entities: &mut Es) {
+	pub fn apply<Es: EntityContainer<E>>(&mut self, entities: &mut Es) {
 		for &(id, ref entity) in self.imported.iter() {
 			entities.import(id, entity.clone());
 		}
