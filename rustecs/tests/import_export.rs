@@ -10,7 +10,7 @@ extern crate rustecs;
 use rustecs::EntityContainer;
 
 
-world! { MyEntities,
+world! {
 	components Component;
 }
 
@@ -20,7 +20,7 @@ pub type Component = u32;
 
 #[test]
 fn it_should_export_all_entities() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 
 	let entity_1 = Entity::new().with_component(5);
 	let entity_2 = Entity::new().with_component(8);
@@ -47,7 +47,7 @@ fn it_should_export_all_entities() {
 
 #[test]
 fn it_should_import_entities() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 
 	let entity_id = 5;
 	entities.import(entity_id, Entity::new().with_component(8));

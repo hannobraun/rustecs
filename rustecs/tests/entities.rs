@@ -10,7 +10,7 @@ extern crate rustecs;
 use rustecs::EntityContainer;
 
 
-world! { MyEntities,
+world! {
 	components Position, Score;
 }
 
@@ -23,7 +23,7 @@ pub type Score = u32;
 
 #[test]
 fn it_should_create_entities() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 
 	assert_eq!(0, entities.positions.len());
 	assert_eq!(0, entities.scores.len());
@@ -53,7 +53,7 @@ fn it_should_create_entities() {
 
 #[test]
 fn it_should_destroy_entities() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 
 	let id = entities.add(
 		Entity::new()

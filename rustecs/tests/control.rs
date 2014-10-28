@@ -13,7 +13,7 @@ use rustecs::{
 };
 
 
-world! { MyEntities,
+world! {
 	components Component;
 }
 
@@ -22,7 +22,7 @@ pub type Component = u16;
 
 #[test]
 fn it_should_add_entities_after_apply() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 	let mut control  = Control::new();
 
 	control.add(Entity::new().with_component(5));
@@ -36,7 +36,7 @@ fn it_should_add_entities_after_apply() {
 
 #[test]
 fn it_should_import_entities_after_apply() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 	let mut control  = Control::new();
 
 	control.import(3, Entity::new().with_component(5));
@@ -51,7 +51,7 @@ fn it_should_import_entities_after_apply() {
 
 #[test]
 fn it_should_remove_entities_after_apply() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 	let mut control  = Control::new();
 
 	let id = entities.add(Entity::new().with_component(5));
@@ -67,7 +67,7 @@ fn it_should_remove_entities_after_apply() {
 
 #[test]
 fn it_should_return_a_unique_id_from_add() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 	let mut control  = Control::new();
 
 	entities.add(Entity::new().with_component(3));
@@ -82,7 +82,7 @@ fn it_should_return_a_unique_id_from_add() {
 
 #[test]
 fn it_should_apply_adds_only_once() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 	let mut control  = Control::new();
 
 	let id = control.add(Entity::new().with_component(5));
@@ -96,7 +96,7 @@ fn it_should_apply_adds_only_once() {
 
 #[test]
 fn it_should_apply_removes_only_once() {
-	let mut entities = MyEntities::new();
+	let mut entities = Entities::new();
 	let mut control  = Control::new();
 
 	let id = entities.add(Entity::new().with_component(5));
