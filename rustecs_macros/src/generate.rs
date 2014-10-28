@@ -32,12 +32,12 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 		)
 		.collect();
 
-	let world  = World::generate(context, &components);
-	let entity = Entity::generate(context, &components);
+	let entities = World::generate(context, &components);
+	let entity   = Entity::generate(context, &components);
 
 	let mut items = Vec::new();
 	items.push_all(vec![extern_crate_rustecs.unwrap()].as_slice());
-	items.push_all(world.0.as_slice());
+	items.push_all(entities.0.as_slice());
 	items.push_all(entity.0.as_slice());
 
 	items
