@@ -32,7 +32,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
 		)
 		.collect();
 
-	let entities = World::generate(context, &components);
+	let entities = Entities::generate(context, &components);
 	let entity   = Entity::generate(context, &components);
 
 	let mut items = Vec::new();
@@ -136,18 +136,18 @@ impl Component {
 }
 
 
-struct World(Vec<P<ast::Item>>);
+struct Entities(Vec<P<ast::Item>>);
 
-impl World {
+impl Entities {
 	fn generate(
 		context   : &ExtCtxt,
 		components: &Components,
-	) -> World {
-		let collection_decls = World::collection_decls(components);
-		let collection_inits = World::collection_inits(components);
-		let inserts          = World::inserts(components);
-		let removes          = World::removes(components);
-		let field_sets       = World::field_sets(components);
+	) -> Entities {
+		let collection_decls = Entities::collection_decls(components);
+		let collection_inits = Entities::collection_inits(components);
+		let inserts          = Entities::inserts(components);
+		let removes          = Entities::removes(components);
+		let field_sets       = Entities::field_sets(components);
 
 		let structure = quote_item!(context,
 			#[deriving(Show)]
@@ -214,7 +214,7 @@ impl World {
 		items.push(implementation.unwrap());
 		items.push(trait_impl.unwrap());
 
-		World(items)
+		Entities(items)
 	}
 
 	fn collection_decls(components: &Components) -> Tokens {
