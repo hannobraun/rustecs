@@ -7,18 +7,18 @@ use super::{
 };
 
 
-pub struct Entities(pub Items);
+pub struct EntitiesGenerator(pub Items);
 
-impl Entities {
+impl EntitiesGenerator {
 	pub fn generate(
 		context   : &ExtCtxt,
 		components: &Components,
-	) -> Entities {
-		let collection_decls = Entities::collection_decls(components);
-		let collection_inits = Entities::collection_inits(components);
-		let inserts          = Entities::inserts(components);
-		let removes          = Entities::removes(components);
-		let field_sets       = Entities::field_sets(components);
+	) -> EntitiesGenerator {
+		let collection_decls = EntitiesGenerator::collection_decls(components);
+		let collection_inits = EntitiesGenerator::collection_inits(components);
+		let inserts          = EntitiesGenerator::inserts(components);
+		let removes          = EntitiesGenerator::removes(components);
+		let field_sets       = EntitiesGenerator::field_sets(components);
 
 		let structure = quote_item!(context,
 			#[deriving(Show)]
@@ -85,7 +85,7 @@ impl Entities {
 		items.push(implementation.unwrap());
 		items.push(trait_impl.unwrap());
 
-		Entities(items)
+		EntitiesGenerator(items)
 	}
 
 	fn collection_decls(components: &Components) -> Tokens {

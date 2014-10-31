@@ -7,7 +7,7 @@ use parse;
 
 use self::intermediate::Component;
 use self::output::{
-	Entities,
+	EntitiesGenerator,
 	Entity,
 };
 
@@ -38,7 +38,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 		)
 		.collect();
 
-	let entities = Entities::generate(context, &components);
+	let entities = EntitiesGenerator::generate(context, &components);
 	let entity   = Entity::generate(context, &components);
 
 	let mut items = Vec::new();
