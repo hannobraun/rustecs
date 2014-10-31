@@ -32,8 +32,8 @@ impl World {
 					loop {
 						components.push(parser.parse_ident());
 
-						parser.eat(&token::COMMA);
-						if parser.eat(&token::SEMI) {
+						parser.eat(&token::Comma);
+						if parser.eat(&token::Semi) {
 							break;
 						}
 					}
@@ -49,7 +49,7 @@ impl World {
 					)
 			}
 
-			if parser.eat(&token::EOF) {
+			if parser.eat(&token::Eof) {
 				break;
 			}
 		}
