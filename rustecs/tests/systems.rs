@@ -17,6 +17,8 @@ world! {
 	components Alpha, Beta;
 
 	events Update;
+
+	system update on(Update) with(Alpha, Beta);
 }
 
 

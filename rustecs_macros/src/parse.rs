@@ -20,12 +20,14 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 pub struct World {
 	pub components: Vec<ast::Ident>,
 	pub events    : Vec<ast::Ident>,
+	pub systems   : Vec<System>,
 }
 
 impl World {
 	fn parse(parser: &mut Parser) -> World {
 		let mut components = Vec::new();
 		let mut events     = Vec::new();
+		let mut systems    = Vec::new();
 
 		loop {
 			let declaration = parser.parse_ident();
@@ -52,6 +54,10 @@ impl World {
 					}
 				},
 
+				"system" => {
+					systems.push(System::parse(parser));
+				}
+
 				_ =>
 					parser.fatal(
 						format!(
@@ -70,6 +76,69 @@ impl World {
 		World {
 			components: components,
 			events    : events,
+			systems   : systems,
+		}
+	}
+}
+
+
+#[deriving(Show)]
+pub struct System {
+	pub name      : ast::Ident,
+	pub event     : ast::Ident,
+	pub components: Vec<ast::Ident>,
+}
+
+impl System {
+	fn parse(parser: &mut Parser) -> System {
+		let name = parser.parse_ident();
+
+		let mut event     : Option<ast::Ident> = None;
+		let mut components: Vec<ast::Ident>    = Vec::new();
+
+		loop {
+			let system_declaration = parser.parse_ident();
+			match system_declaration.as_str() {
+				"on" => {
+					parser.expect(&token::LParen);
+					event = Some(parser.parse_ident());
+					parser.expect(&token::RParen);
+				},
+
+				"with" => {
+					parser.expect(&token::LParen);
+					loop {
+						components.push(parser.parse_ident());
+						parser.eat(&token::Comma);
+						if parser.eat(&token::RParen) {
+							break;
+						}
+					}
+				},
+
+				_ =>
+					parser.fatal(
+						format!(
+							"Expected 'on' or 'with', found{}",
+							system_declaration.as_str(),
+						)
+						.as_slice()
+					)
+			}
+
+			if parser.eat(&token::Semi) {
+				break;
+			}
+		}
+
+		let event = event.unwrap_or_else(|| {
+			parser.fatal("You need to specify an event");
+		});
+
+		System {
+			name      : name,
+			event     : event,
+			components: components,
 		}
 	}
 }
