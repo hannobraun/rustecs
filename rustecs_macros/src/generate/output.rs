@@ -214,10 +214,7 @@ pub struct SystemsGenerator(pub Items);
 
 impl SystemsGenerator {
 	pub fn generate(context: &ExtCtxt, systems: Systems) -> SystemsGenerator {
-		let mut system_calls = Vec::new();
-		for system in systems.into_iter() {
-			system_calls.push(system.call);
-		}
+		let system_calls = SystemsGenerator::system_calls(context, systems);
 
 		let structure = quote_item!(context,
 			pub struct Systems;
@@ -239,5 +236,15 @@ impl SystemsGenerator {
 			structure.unwrap(),
 			implementation.unwrap(),
 		])
+	}
+
+	fn system_calls(context: &ExtCtxt, systems: Systems) -> Tokens {
+		let mut tokens = Vec::new();
+
+		for system in systems.into_iter() {
+			tokens.push_all(system.call.as_slice());
+		}
+
+		tokens
 	}
 }

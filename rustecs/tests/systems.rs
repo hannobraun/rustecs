@@ -50,5 +50,6 @@ fn it_should_pass_components_into_a_system() {
 
 	systems.trigger(Update, &mut entities);
 
-	assert_eq!(true, entities.betas[id]);
+	assert_eq!(false, entities.alphas[id]);
+	assert_eq!(true , entities.betas[id]);
 }
