@@ -5,10 +5,14 @@ use syntax::ptr::P;
 
 use parse;
 
-use self::intermediate::Component;
+use self::intermediate::{
+	Component,
+	System,
+};
 use self::output::{
 	EntitiesGenerator,
 	EntityGenerator,
+	SystemsGenerator,
 };
 
 
@@ -18,6 +22,7 @@ mod output;
 
 type Components = HashMap<String, Component>;
 type Items      = Vec<P<ast::Item>>;
+type Systems    = Vec<System>;
 type Tokens     = Vec<ast::TokenTree>;
 
 
@@ -37,14 +42,22 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 			(component.name.clone(), component)
 		)
 		.collect();
+	let systems: Systems = world.systems
+		.iter()
+		.map(|system|
+			System::generate(context, system, &components)
+		)
+		.collect();
 
 	let entities = EntitiesGenerator::generate(context, &components);
 	let entity   = EntityGenerator::generate(context, &components);
+	let systems  = SystemsGenerator::generate(context, systems);
 
 	let mut items = Vec::new();
 	items.push_all(vec![extern_crate_rustecs.unwrap()].as_slice());
 	items.push_all(entities.0.as_slice());
 	items.push_all(entity.0.as_slice());
+	items.push_all(systems.0.as_slice());
 
 	items
 }

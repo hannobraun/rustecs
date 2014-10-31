@@ -3,6 +3,7 @@ use syntax::ext::base::ExtCtxt;
 use super::{
 	Components,
 	Items,
+	Systems,
 	Tokens,
 };
 
@@ -205,5 +206,38 @@ impl EntityGenerator {
 		}
 
 		fns
+	}
+}
+
+
+pub struct SystemsGenerator(pub Items);
+
+impl SystemsGenerator {
+	pub fn generate(context: &ExtCtxt, systems: Systems) -> SystemsGenerator {
+		let mut system_calls = Vec::new();
+		for system in systems.into_iter() {
+			system_calls.push(system.call);
+		}
+
+		let structure = quote_item!(context,
+			pub struct Systems;
+		);
+
+		let implementation = quote_item!(context,
+			impl Systems {
+				pub fn new() -> Systems {
+					Systems
+				}
+
+				pub fn trigger<T>(&self, _event: T, _entities: &mut Entities) {
+					$system_calls
+				}
+			}
+		);
+
+		SystemsGenerator(vec![
+			structure.unwrap(),
+			implementation.unwrap(),
+		])
 	}
 }

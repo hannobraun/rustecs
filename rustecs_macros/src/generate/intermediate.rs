@@ -6,8 +6,12 @@ use names::{
 	camel_to_snake_case,
 	type_to_collection_name,
 };
+use parse;
 
-use super::Tokens;
+use super::{
+	Components,
+	Tokens,
+};
 
 
 #[deriving(Clone, Show)]
@@ -24,6 +28,7 @@ pub struct Component {
 
 	pub collection_decl: Tokens,
 	pub collection_init: Tokens,
+	pub collection_arg : Tokens,
 
 	pub builder_fn: Tokens,
 }
@@ -74,6 +79,9 @@ impl Component {
 		let collection_init = quote_tokens!(context,
 			$collection: _r::rustecs::components(),
 		);
+		let collection_arg = quote_tokens!(context,
+			&mut _entities.$collection,
+		);
 
 		let builder_fn = quote_tokens!(context,
 			pub fn $builder_name(mut self, component: $ty) -> Entity {
@@ -95,8 +103,56 @@ impl Component {
 
 			collection_decl: collection_decl,
 			collection_init: collection_init,
+			collection_arg : collection_arg,
 
 			builder_fn: builder_fn,
 		}
+	}
+}
+
+
+pub struct System {
+	pub call: Tokens,
+}
+
+impl System {
+	pub fn generate(
+		context   : &ExtCtxt,
+		system    : &parse::System,
+		components: &Components,
+	) -> System {
+		let name = system.name;
+
+		let component_args =
+			System::component_args(context, system, components);
+
+		let call = quote_tokens!(context,
+			$name($component_args);
+		);
+
+		System {
+			call: call,
+		}
+	}
+
+	fn component_args(
+		context   : &ExtCtxt,
+		system    : &parse::System,
+		components: &Components,
+	) -> Tokens {
+		let mut tokens = Vec::new();
+
+		for ident in system.components.iter() {
+			let ref arg = components[ident.as_str().to_string()].collection_arg;
+
+			tokens.push_all(
+				quote_tokens!(context,
+					$arg
+				)
+				.as_slice()
+			);
+		}
+
+		tokens
 	}
 }
