@@ -112,7 +112,8 @@ impl Component {
 
 
 pub struct System {
-	pub call: Tokens,
+	pub event: ast::Ident,
+	pub call : Tokens,
 }
 
 impl System {
@@ -131,7 +132,8 @@ impl System {
 		);
 
 		System {
-			call: call,
+			event: system.event,
+			call : call,
 		}
 	}
 

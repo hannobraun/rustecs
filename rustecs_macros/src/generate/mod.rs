@@ -30,6 +30,9 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 	let extern_crate_rustecs = quote_item!(context,
 		mod _r {
 			extern crate rustecs;
+
+			pub use std::any::Any;
+			pub use std::intrinsics::TypeId;
 		}
 	);
 
@@ -51,7 +54,11 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 
 	let entities = EntitiesGenerator::generate(context, &components);
 	let entity   = EntityGenerator::generate(context, &components);
-	let systems  = SystemsGenerator::generate(context, systems);
+	let systems  = SystemsGenerator::generate(
+		context,
+		world.events.as_slice(),
+		systems
+	);
 
 	let mut items = Vec::new();
 	items.push_all(vec![extern_crate_rustecs.unwrap()].as_slice());

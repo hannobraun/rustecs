@@ -16,8 +16,9 @@ use rustecs::{
 world! {
 	components Alpha, Beta;
 
-	events Update;
+	events Init, Update;
 
+	system init   on(Init)   with(Alpha, Beta);
 	system update on(Update) with(Alpha, Beta);
 }
 
@@ -25,11 +26,22 @@ world! {
 pub type Alpha = bool;
 pub type Beta  = bool;
 
+pub struct Init;
 pub struct Update;
 
+
+fn init(
+	alphas: &mut Components<Alpha>,
+	_     : &Components<Beta>
+) {
+	for (_, alpha) in alphas.iter_mut() {
+		*alpha = true;
+	}
+}
+
 fn update(
-	_alphas: &Components<Alpha>,
-	betas  : &mut Components<Beta>
+	_    : &Components<Alpha>,
+	betas: &mut Components<Beta>
 ) {
 	for (_, beta) in betas.iter_mut() {
 		*beta = true;
@@ -38,7 +50,7 @@ fn update(
 
 
 #[test]
-fn it_should_pass_components_into_a_system() {
+fn it_should_trigger_systems_by_event() {
 	let mut entities = Entities::new();
 	let     systems  = Systems::new();
 

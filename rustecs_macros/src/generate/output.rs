@@ -1,3 +1,4 @@
+use syntax::ast;
 use syntax::ext::base::ExtCtxt;
 
 use super::{
@@ -213,8 +214,16 @@ impl EntityGenerator {
 pub struct SystemsGenerator(pub Items);
 
 impl SystemsGenerator {
-	pub fn generate(context: &ExtCtxt, systems: Systems) -> SystemsGenerator {
-		let system_calls = SystemsGenerator::system_calls(context, systems);
+	pub fn generate(
+		context: &ExtCtxt,
+		events : &[ast::Ident],
+		systems: Systems
+	) -> SystemsGenerator {
+		let system_calls = SystemsGenerator::system_calls(
+			context,
+			events,
+			systems,
+		);
 
 		let structure = quote_item!(context,
 			pub struct Systems;
@@ -226,7 +235,7 @@ impl SystemsGenerator {
 					Systems
 				}
 
-				pub fn trigger<T>(&self, _event: T, _entities: &mut Entities) {
+				pub fn trigger<T: _r::Any>(&self, _event: T, _entities: &mut Entities) {
 					$system_calls
 				}
 			}
@@ -238,11 +247,36 @@ impl SystemsGenerator {
 		])
 	}
 
-	fn system_calls(context: &ExtCtxt, systems: Systems) -> Tokens {
+	fn system_calls(
+		context: &ExtCtxt,
+		events : &[ast::Ident],
+		systems: Systems
+	) -> Tokens {
 		let mut tokens = Vec::new();
 
-		for system in systems.into_iter() {
-			tokens.push_all(system.call.as_slice());
+		for &ident in events.iter() {
+			let mut calls_for_event = Vec::new();
+
+			let mut iter = systems
+				.iter()
+				.filter(
+					|system|
+						system.event == ident
+				);
+			for system in iter {
+				calls_for_event.push_all(system.call.as_slice());
+			}
+
+
+			tokens.push_all(
+				quote_tokens!(context,
+					if _event.get_type_id() == _r::TypeId::of::<$ident>() {
+						$calls_for_event
+						return;
+					}
+				)
+				.as_slice()
+			);
 		}
 
 		tokens
