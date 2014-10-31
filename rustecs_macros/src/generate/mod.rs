@@ -21,8 +21,9 @@ mod output;
 
 
 type Components = HashMap<String, Component>;
-type Items      = Vec<P<ast::Item>>;
 type Systems    = Vec<System>;
+
+type Items      = Vec<P<ast::Item>>;
 type Tokens     = Vec<ast::TokenTree>;
 
 
