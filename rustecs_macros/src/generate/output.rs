@@ -1,14 +1,13 @@
-use syntax::ast;
 use syntax::ext::base::ExtCtxt;
-use syntax::ptr::P;
 
 use super::{
 	Components,
+	Items,
 	Tokens,
 };
 
 
-pub struct Entities(pub Vec<P<ast::Item>>);
+pub struct Entities(pub Items);
 
 impl Entities {
 	pub fn generate(
@@ -141,7 +140,7 @@ impl Entities {
 }
 
 
-pub struct Entity(pub Vec<P<ast::Item>>);
+pub struct Entity(pub Items);
 
 impl Entity {
 	pub fn generate(context: &ExtCtxt, components: &Components) -> Entity {

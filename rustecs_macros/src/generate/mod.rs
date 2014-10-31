@@ -17,10 +17,11 @@ mod output;
 
 
 type Components = HashMap<String, Component>;
+type Items      = Vec<P<ast::Item>>;
 type Tokens     = Vec<ast::TokenTree>;
 
 
-pub fn items(context: &ExtCtxt, world: &parse::World) -> Vec<P<ast::Item>> {
+pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 	let extern_crate_rustecs = quote_item!(context,
 		mod _r {
 			extern crate rustecs;
