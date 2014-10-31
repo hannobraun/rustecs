@@ -100,17 +100,17 @@ impl System {
 			let system_declaration = parser.parse_ident();
 			match system_declaration.as_str() {
 				"on" => {
-					parser.expect(&token::LParen);
+					parser.expect(&token::OpenDelim(token::Paren));
 					event = Some(parser.parse_ident());
-					parser.expect(&token::RParen);
+					parser.expect(&token::CloseDelim(token::Paren));
 				},
 
 				"with" => {
-					parser.expect(&token::LParen);
+					parser.expect(&token::OpenDelim(token::Paren));
 					loop {
 						components.push(parser.parse_ident());
 						parser.eat(&token::Comma);
-						if parser.eat(&token::RParen) {
+						if parser.eat(&token::CloseDelim(token::Paren)) {
 							break;
 						}
 					}
