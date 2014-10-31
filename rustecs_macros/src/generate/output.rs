@@ -140,13 +140,16 @@ impl EntitiesGenerator {
 }
 
 
-pub struct Entity(pub Items);
+pub struct EntityGenerator(pub Items);
 
-impl Entity {
-	pub fn generate(context: &ExtCtxt, components: &Components) -> Entity {
-		let field_decls = Entity::field_decls(components);
-		let field_inits = Entity::field_inits(components);
-		let builder_fns = Entity::builder_fns(components);
+impl EntityGenerator {
+	pub fn generate(
+		context   : &ExtCtxt,
+		components: &Components
+	) -> EntityGenerator {
+		let field_decls = EntityGenerator::field_decls(components);
+		let field_inits = EntityGenerator::field_inits(components);
+		let builder_fns = EntityGenerator::builder_fns(components);
 
 		let structure = quote_item!(context,
 			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
@@ -171,7 +174,7 @@ impl Entity {
 		items.push(structure.unwrap());
 		items.push(implementation.unwrap());
 
-		Entity(items)
+		EntityGenerator(items)
 	}
 
 	fn field_decls(components: &Components) -> Tokens {
