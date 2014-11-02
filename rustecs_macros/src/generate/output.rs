@@ -23,7 +23,6 @@ impl EntitiesGenerator {
 		let field_sets       = EntitiesGenerator::field_sets(components);
 
 		let structure = quote_item!(context,
-			#[deriving(Show)]
 			pub struct Entities {
 				entities: ::std::collections::HashSet<_r::rustecs::EntityId>,
 				next_id : _r::rustecs::EntityId,
@@ -154,7 +153,7 @@ impl EntityGenerator {
 		let builder_fns = EntityGenerator::builder_fns(components);
 
 		let structure = quote_item!(context,
-			#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
+			#[deriving(PartialEq, Show)]
 			pub struct Entity {
 				$field_decls
 			}
