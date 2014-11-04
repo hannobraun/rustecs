@@ -72,8 +72,13 @@ impl EntitiesGenerator {
 					$removes
 				}
 
-				fn export(&self) -> Vec<(_r::rustecs::EntityId, Entity)> {
-					self.entities
+				fn export(mut self) -> Vec<(_r::rustecs::EntityId, Entity)> {
+					let ids: Vec<_r::rustecs::EntityId> = self.entities
+						.iter()
+						.map(|id| *id)
+						.collect();
+
+					ids
 						.iter()
 						.map(|id|
 							(*id, Entity { $field_sets })

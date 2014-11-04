@@ -16,7 +16,7 @@ pub trait EntityContainer<E> {
 	fn import(&mut self, id: EntityId, entity: E);
 	fn remove(&mut self, id: EntityId);
 
-	fn export(&self) -> Vec<(EntityId, E)>;
+	fn export(self) -> Vec<(EntityId, E)>;
 }
 
 

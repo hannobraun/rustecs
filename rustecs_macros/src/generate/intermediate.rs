@@ -70,7 +70,7 @@ impl Component {
 			$var_name: None,
 		);
 		let field_set = quote_tokens!(context,
-			$var_name: self.$collection.find_copy(id),
+			$var_name: self.$collection.pop(id),
 		);
 
 		let collection_decl = quote_tokens!(context,
