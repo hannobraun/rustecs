@@ -1,8 +1,6 @@
 #![feature(phase)]
 
 
-extern crate serialize;
-
 extern crate rustecs;
 #[phase(plugin)] extern crate rustecs_macros;
 
