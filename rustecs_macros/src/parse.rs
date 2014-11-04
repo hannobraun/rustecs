@@ -18,16 +18,18 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 
 #[deriving(Show)]
 pub struct World {
-	pub components: Vec<ast::Ident>,
-	pub events    : Vec<ast::Ident>,
-	pub systems   : Vec<System>,
+	pub components    : Vec<ast::Ident>,
+	pub events        : Vec<ast::Ident>,
+	pub systems       : Vec<System>,
+	pub derived_traits: Vec<ast::Ident>,
 }
 
 impl World {
 	fn parse(parser: &mut Parser) -> World {
-		let mut components = Vec::new();
-		let mut events     = Vec::new();
-		let mut systems    = Vec::new();
+		let mut components     = Vec::new();
+		let mut events         = Vec::new();
+		let mut systems        = Vec::new();
+		let mut derived_traits = Vec::new();
 
 		loop {
 			let declaration = parser.parse_ident();
@@ -56,7 +58,18 @@ impl World {
 
 				"system" => {
 					systems.push(System::parse(parser));
-				}
+				},
+
+				"derived_traits" => {
+					loop {
+						derived_traits.push(parser.parse_ident());
+
+						parser.eat(&token::Comma);
+						if parser.eat(&token::Semi) {
+							break;
+						}
+					}
+				},
 
 				_ =>
 					parser.fatal(
@@ -74,9 +87,10 @@ impl World {
 		}
 
 		World {
-			components: components,
-			events    : events,
-			systems   : systems,
+			components    : components,
+			events        : events,
+			systems       : systems,
+			derived_traits: derived_traits,
 		}
 	}
 }
