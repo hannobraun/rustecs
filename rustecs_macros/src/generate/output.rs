@@ -15,6 +15,7 @@ impl EntitiesGenerator {
 	pub fn generate(
 		context   : &ExtCtxt,
 		components: &Components,
+		deriving  : &Tokens,
 	) -> EntitiesGenerator {
 		let collection_decls = EntitiesGenerator::collection_decls(components);
 		let collection_inits = EntitiesGenerator::collection_inits(components);
@@ -23,6 +24,7 @@ impl EntitiesGenerator {
 		let field_sets       = EntitiesGenerator::field_sets(components);
 
 		let structure = quote_item!(context,
+			$deriving
 			pub struct Entities {
 				entities: ::std::collections::HashSet<_r::rustecs::EntityId>,
 				next_id : _r::rustecs::EntityId,
@@ -146,14 +148,15 @@ pub struct EntityGenerator(pub Items);
 impl EntityGenerator {
 	pub fn generate(
 		context   : &ExtCtxt,
-		components: &Components
+		components: &Components,
+		deriving  : &Tokens,
 	) -> EntityGenerator {
 		let field_decls = EntityGenerator::field_decls(components);
 		let field_inits = EntityGenerator::field_inits(components);
 		let builder_fns = EntityGenerator::builder_fns(components);
 
 		let structure = quote_item!(context,
-			#[deriving(PartialEq, Show)]
+			$deriving
 			pub struct Entity {
 				$field_decls
 			}
@@ -214,9 +217,10 @@ pub struct SystemsGenerator(pub Items);
 
 impl SystemsGenerator {
 	pub fn generate(
-		context: &ExtCtxt,
-		events : &[ast::Ident],
-		systems: Systems
+		context : &ExtCtxt,
+		events  : &[ast::Ident],
+		systems : Systems,
+		deriving: &Tokens,
 	) -> SystemsGenerator {
 		let system_calls = SystemsGenerator::system_calls(
 			context,
@@ -225,6 +229,7 @@ impl SystemsGenerator {
 		);
 
 		let structure = quote_item!(context,
+			$deriving
 			pub struct Systems;
 		);
 

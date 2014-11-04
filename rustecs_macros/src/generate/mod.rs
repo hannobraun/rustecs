@@ -37,6 +37,30 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 		}
 	);
 
+	let mut derived_traits = Vec::new();
+	for (i, ident) in world.derived_traits.iter().enumerate() {
+		if i + 1 == world.derived_traits.len() {
+			derived_traits.push_all(
+				quote_tokens!(context,
+					$ident
+				)
+				.as_slice()
+			);
+		}
+		else {
+			derived_traits.push_all(
+				quote_tokens!(context,
+					$ident,
+				)
+				.as_slice()
+			);
+		}
+	}
+
+	let deriving = quote_tokens!(context,
+		#[deriving($derived_traits)]
+	);
+
 	let components: Components = world.components
 		.iter()
 		.map(|&component|
@@ -53,12 +77,13 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 		)
 		.collect();
 
-	let entities = EntitiesGenerator::generate(context, &components);
-	let entity   = EntityGenerator::generate(context, &components);
+	let entities = EntitiesGenerator::generate(context, &components, &deriving);
+	let entity   = EntityGenerator::generate(context, &components, &deriving);
 	let systems  = SystemsGenerator::generate(
 		context,
 		world.events.as_slice(),
-		systems
+		systems,
+		&deriving,
 	);
 
 	let mut items = Vec::new();

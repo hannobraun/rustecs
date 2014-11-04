@@ -12,3 +12,11 @@ world! {
 }
 
 pub type Alpha = u32;
+
+
+#[test]
+fn it_should_derive_the_traits_for_all_data_structures() {
+	format!("{}", Entities::new());
+	format!("{}", Entity::new());
+	format!("{}", Systems::new());
+}
