@@ -57,9 +57,14 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 		}
 	}
 
-	let deriving = quote_tokens!(context,
-		#[deriving($derived_traits)]
-	);
+	let deriving = if world.derived_traits.len() > 0 {
+		quote_tokens!(context,
+			#[deriving($derived_traits)]
+		)
+	}
+	else {
+		Vec::new()
+	};
 
 	let components: Components = world.components
 		.iter()
