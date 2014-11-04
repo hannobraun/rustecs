@@ -15,7 +15,7 @@ world! {
 }
 
 
-#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
+#[deriving(PartialEq, Show)]
 pub struct Position(f64, f64);
 
 pub type Score = u32;
