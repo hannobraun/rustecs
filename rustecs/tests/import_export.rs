@@ -12,6 +12,8 @@ use rustecs::EntityContainer;
 
 world! {
 	components Component;
+
+	derived_traits PartialEq, Show;
 }
 
 
