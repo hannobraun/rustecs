@@ -12,6 +12,7 @@ use self::intermediate::{
 use self::output::{
 	EntitiesGenerator,
 	EntityGenerator,
+	EventGenerator,
 	SystemsGenerator,
 };
 
@@ -75,6 +76,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 			(component.name.clone(), component)
 		)
 		.collect();
+	let events = world.events.as_slice();
 	let systems: Systems = world.systems
 		.iter()
 		.map(|system|
@@ -84,9 +86,10 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 
 	let entities = EntitiesGenerator::generate(context, &components, &deriving);
 	let entity   = EntityGenerator::generate(context, &components, &deriving);
+	let event    = EventGenerator::generate(context, events, &deriving);
 	let systems  = SystemsGenerator::generate(
 		context,
-		world.events.as_slice(),
+		events,
 		systems,
 		&deriving,
 	);
@@ -95,6 +98,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 	items.push_all(vec![extern_crate_rustecs.unwrap()].as_slice());
 	items.push_all(entities.0.as_slice());
 	items.push_all(entity.0.as_slice());
+	items.push_all(event.0.as_slice());
 	items.push_all(systems.0.as_slice());
 
 	items

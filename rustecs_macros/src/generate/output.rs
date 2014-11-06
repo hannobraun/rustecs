@@ -1,5 +1,6 @@
 use syntax::ast;
 use syntax::ext::base::ExtCtxt;
+use syntax::parse::token;
 
 use super::{
 	Components,
@@ -214,6 +215,42 @@ impl EntityGenerator {
 		}
 
 		fns
+	}
+}
+
+
+pub struct EventGenerator(pub Items);
+
+impl EventGenerator {
+	pub fn generate(
+		context : &ExtCtxt,
+		events  : &[ast::Ident],
+		deriving: &Tokens,
+	) -> EventGenerator {
+		let mut variants: Tokens = Vec::new();
+		for ident in events.iter() {
+			let variant = ast::Ident::new(token::intern(
+				format!("{}Event", ident.as_str()).as_slice()
+			));
+
+			variants.push_all(
+				quote_tokens!(context,
+					$variant($ident),
+				)
+				.as_slice()
+			);
+		}
+
+		let enumeration = quote_item!(context,
+			$deriving
+			pub enum Event {
+				$variants
+			}
+		);
+
+		EventGenerator(vec![
+			enumeration.unwrap(),
+		])
 	}
 }
 
