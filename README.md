@@ -59,23 +59,17 @@ The following type definitions complete the example.
 
 ``` Rust
 // Regular struct
-#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
 struct Position {
 	x: i16,
 	y: i16,
 }
 
 // Tuple struct
-#[deriving(Clone, Decodable, Encodable, PartialEq, Show)]
 struct Size(u16);
 
 // Simple type definition
 type Score = u32;
 ```
-
-Rustecs expects components to implement a bunch of basic traits. This is quite
-useful, since it allows Rustecs to derive those traits for the data structures
-it implements, enabling us to do a lot of interesting things with them.
 
 You might ask yourself why we're defining `Score` as `u32` and not just use
 `u32` directly in the world definition above. While that should work (I haven't
@@ -372,6 +366,26 @@ Besides removing, `Control` can also add players and more. Please take a look at
 `Control`'s
 [unit tests](https://github.com/hannobraun/rustecs/tree/master/rustecs/tests)
 for the full details.
+
+
+### Deriving Traits for the Generated Types
+
+By default, Rustecs doesn't derive any traits for any of the types it generates.
+But what if you want to print `Entities` to help with debugging? Or if you want
+to serialze `Entity` to JSON`? Rustecs provides the `derived_traits` directive
+to help with such cases.
+
+``` Rust
+world! {
+	components One, Two;
+
+	derived_traits Clone, Decodable, Encodable, Show;
+}
+```
+
+The traits specified by the `derived_traits` directive will be derived for all
+generated types, like `Entities` and `Entity`. Please note that this can only
+work if all your component types also implement all those traits.
 
 
 ### That's It!
