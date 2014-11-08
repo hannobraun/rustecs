@@ -60,7 +60,8 @@ fn it_should_trigger_systems_by_event() {
 			.with_beta(false)
 	);
 
-	systems.trigger(UpdateEvent(Update), &mut entities);
+	let mut update = Update;
+	systems.trigger(UpdateEvent(&mut update), &mut entities);
 
 	assert_eq!(false, entities.alphas[id]);
 	assert_eq!(true , entities.betas[id]);

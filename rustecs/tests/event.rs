@@ -26,6 +26,9 @@ pub struct Update;
 
 #[test]
 fn it_should_generate_an_event_enum() {
-	let _init  : Event = InitEvent(Init);
-	let _update: Event = UpdateEvent(Update);
+	let mut init   = Init;
+	let mut update = Update;
+
+	let _init_event  : Event = InitEvent(&mut init);
+	let _update_event: Event = UpdateEvent(&mut update);
 }

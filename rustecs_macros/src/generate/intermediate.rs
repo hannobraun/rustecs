@@ -147,7 +147,7 @@ impl System {
 			System::component_args(context, system, components);
 
 		let call = quote_tokens!(context,
-			$name(&mut _event, $component_args);
+			$name(_event, $component_args);
 		);
 
 		System {

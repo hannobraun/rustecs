@@ -233,7 +233,7 @@ impl EventGenerator {
 
 			variants.push_all(
 				quote_tokens!(context,
-					$variant($name),
+					$variant(&'r mut $name),
 				)
 				.as_slice()
 			);
@@ -241,7 +241,7 @@ impl EventGenerator {
 
 		let enumeration = quote_item!(context,
 			$deriving
-			pub enum Event {
+			pub enum Event<'r> {
 				$variants
 			}
 		);
