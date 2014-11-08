@@ -111,6 +111,25 @@ impl Component {
 }
 
 
+pub struct Event {
+	pub name   : ast::Ident,
+	pub variant: ast::Ident,
+}
+
+impl Event {
+	pub fn generate(event: &ast::Ident) -> Event {
+		let variant = ast::Ident::new(token::intern(
+			format!("{}Event", event.as_str()).as_slice()
+		));
+
+		Event {
+			name   : event.clone(),
+			variant: variant,
+		}
+	}
+}
+
+
 pub struct System {
 	pub event: ast::Ident,
 	pub call : Tokens,

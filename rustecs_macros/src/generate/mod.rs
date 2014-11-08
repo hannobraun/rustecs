@@ -7,6 +7,7 @@ use parse;
 
 use self::intermediate::{
 	Component,
+	Event,
 	System,
 };
 use self::output::{
@@ -22,6 +23,7 @@ mod output;
 
 
 type Components = HashMap<String, Component>;
+type Events     = Vec<Event>;
 type Systems    = Vec<System>;
 
 type Items      = Vec<P<ast::Item>>;
@@ -76,7 +78,12 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 			(component.name.clone(), component)
 		)
 		.collect();
-	let events = world.events.as_slice();
+	let events: Events = world.events
+		.iter()
+		.map(|event|
+			Event::generate(event)
+		)
+		.collect();
 	let systems: Systems = world.systems
 		.iter()
 		.map(|system|
@@ -86,10 +93,10 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 
 	let entities = EntitiesGenerator::generate(context, &components, &deriving);
 	let entity   = EntityGenerator::generate(context, &components, &deriving);
-	let event    = EventGenerator::generate(context, events, &deriving);
+	let event    = EventGenerator::generate(context, &events, &deriving);
 	let systems  = SystemsGenerator::generate(
 		context,
-		events,
+		world.events.as_slice(),
 		systems,
 		&deriving,
 	);

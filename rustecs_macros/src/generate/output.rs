@@ -1,9 +1,9 @@
 use syntax::ast;
 use syntax::ext::base::ExtCtxt;
-use syntax::parse::token;
 
 use super::{
 	Components,
+	Events,
 	Items,
 	Systems,
 	Tokens,
@@ -224,18 +224,17 @@ pub struct EventGenerator(pub Items);
 impl EventGenerator {
 	pub fn generate(
 		context : &ExtCtxt,
-		events  : &[ast::Ident],
+		events  : &Events,
 		deriving: &Tokens,
 	) -> EventGenerator {
 		let mut variants: Tokens = Vec::new();
-		for ident in events.iter() {
-			let variant = ast::Ident::new(token::intern(
-				format!("{}Event", ident.as_str()).as_slice()
-			));
+		for event in events.iter() {
+			let name    = event.name;
+			let variant = event.variant;
 
 			variants.push_all(
 				quote_tokens!(context,
-					$variant($ident),
+					$variant($name),
 				)
 				.as_slice()
 			);
