@@ -58,7 +58,7 @@ fn it_should_trigger_systems_by_event() {
 			.with_beta(false)
 	);
 
-	systems.trigger(Update, &mut entities);
+	systems.trigger(UpdateEvent(Update), &mut entities);
 
 	assert_eq!(false, entities.alphas[id]);
 	assert_eq!(true , entities.betas[id]);

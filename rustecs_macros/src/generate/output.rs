@@ -279,8 +279,10 @@ impl SystemsGenerator {
 					Systems
 				}
 
-				pub fn trigger<T: _r::Any>(&self, _event: T, _entities: &mut Entities) {
-					$system_calls
+				pub fn trigger(&self, event: Event, _entities: &mut Entities) {
+					match event {
+						$system_calls
+					}
 				}
 			}
 		);
@@ -301,7 +303,8 @@ impl SystemsGenerator {
 		for event in events.iter() {
 			let mut calls_for_event = Vec::new();
 
-			let name = event.name;
+			let name    = event.name;
+			let variant = event.variant;
 
 			let mut iter = systems
 				.iter()
@@ -316,10 +319,9 @@ impl SystemsGenerator {
 
 			tokens.push_all(
 				quote_tokens!(context,
-					if _event.get_type_id() == _r::TypeId::of::<$name>() {
+					$variant(_) => {
 						$calls_for_event
-						return;
-					}
+					},
 				)
 				.as_slice()
 			);
