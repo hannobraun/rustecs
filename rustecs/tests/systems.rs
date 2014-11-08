@@ -29,6 +29,7 @@ pub struct Update;
 
 
 fn init(
+	_event: &mut Init,
 	alphas: &mut Components<Alpha>,
 	_     : &Components<Beta>
 ) {
@@ -38,8 +39,9 @@ fn init(
 }
 
 fn update(
-	_    : &Components<Alpha>,
-	betas: &mut Components<Beta>
+	_event: &mut Update,
+	_     : &Components<Alpha>,
+	betas : &mut Components<Beta>
 ) {
 	for (_, beta) in betas.iter_mut() {
 		*beta = true;
