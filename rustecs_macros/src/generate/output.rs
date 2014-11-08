@@ -1,4 +1,3 @@
-use syntax::ast;
 use syntax::ext::base::ExtCtxt;
 
 use super::{
@@ -259,7 +258,7 @@ pub struct SystemsGenerator(pub Items);
 impl SystemsGenerator {
 	pub fn generate(
 		context : &ExtCtxt,
-		events  : &[ast::Ident],
+		events  : &Events,
 		systems : Systems,
 		deriving: &Tokens,
 	) -> SystemsGenerator {
@@ -294,19 +293,21 @@ impl SystemsGenerator {
 
 	fn system_calls(
 		context: &ExtCtxt,
-		events : &[ast::Ident],
+		events : &Events,
 		systems: Systems
 	) -> Tokens {
 		let mut tokens = Vec::new();
 
-		for &ident in events.iter() {
+		for event in events.iter() {
 			let mut calls_for_event = Vec::new();
+
+			let name = event.name;
 
 			let mut iter = systems
 				.iter()
 				.filter(
 					|system|
-						system.event == ident
+						system.event == name
 				);
 			for system in iter {
 				calls_for_event.push_all(system.call.as_slice());
@@ -315,7 +316,7 @@ impl SystemsGenerator {
 
 			tokens.push_all(
 				quote_tokens!(context,
-					if _event.get_type_id() == _r::TypeId::of::<$ident>() {
+					if _event.get_type_id() == _r::TypeId::of::<$name>() {
 						$calls_for_event
 						return;
 					}

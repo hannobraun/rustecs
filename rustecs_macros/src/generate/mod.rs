@@ -96,7 +96,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 	let event    = EventGenerator::generate(context, &events, &deriving);
 	let systems  = SystemsGenerator::generate(
 		context,
-		world.events.as_slice(),
+		&events,
 		systems,
 		&deriving,
 	);
