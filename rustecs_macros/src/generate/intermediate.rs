@@ -63,21 +63,25 @@ impl Component {
 			self.$collection.remove(&id);
 		);
 
+        /* Todo: Parenthesis after $foo: are currently required in quote_tokens! to work around
+         * ambiguity between macro-by-example $name:kind style matchers. Clean up once
+         * rust-lang/rust#18775 is fixed.
+         */
 		let field_decl = quote_tokens!(context,
-			pub $var_name: Option<$ty>,
+			pub $var_name: (Option<$ty>),
 		);
 		let field_init = quote_tokens!(context,
-			$var_name: None,
+			$var_name: (None),
 		);
 		let field_set = quote_tokens!(context,
-			$var_name: self.$collection.pop(id),
+			$var_name: (self.$collection.pop(id)),
 		);
 
 		let collection_decl = quote_tokens!(context,
-			pub $collection: _r::rustecs::Components<$ty>,
+			pub $collection: (_r::rustecs::Components<$ty>),
 		);
 		let collection_init = quote_tokens!(context,
-			$collection: _r::rustecs::components(),
+			$collection: (_r::rustecs::components()),
 		);
 		let collection_arg = quote_tokens!(context,
 			&mut _entities.$collection,
