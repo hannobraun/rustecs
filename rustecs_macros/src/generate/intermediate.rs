@@ -116,19 +116,13 @@ impl Component {
 
 
 pub struct Event {
-	pub name   : ast::Ident,
-	pub variant: ast::Ident,
+	pub name: ast::Ident,
 }
 
 impl Event {
-	pub fn generate(event: &ast::Ident) -> Event {
-		let variant = ast::Ident::new(token::intern(
-			format!("{}Event", event.as_str()).as_slice()
-		));
-
+	pub fn generate(event: ast::Ident) -> Event {
 		Event {
-			name   : event.clone(),
-			variant: variant,
+			name: event,
 		}
 	}
 }

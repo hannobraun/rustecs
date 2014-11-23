@@ -61,7 +61,7 @@ fn it_should_trigger_systems_by_event() {
 	);
 
 	let mut update = Update;
-	systems.trigger(Event::UpdateEvent(&mut update), &mut entities);
+	systems.trigger(Event::Update(&mut update), &mut entities);
 
 	assert_eq!(false, entities.alphas[id]);
 	assert_eq!(true , entities.betas[id]);

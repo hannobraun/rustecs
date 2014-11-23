@@ -81,7 +81,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 	let events: Events = world.events
 		.iter()
 		.map(|event|
-			Event::generate(event)
+			Event::generate(*event)
 		)
 		.collect();
 	let systems: Systems = world.systems

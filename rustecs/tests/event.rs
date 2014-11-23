@@ -29,6 +29,6 @@ fn it_should_generate_an_event_enum() {
 	let mut init   = Init;
 	let mut update = Update;
 
-	let _init_event  : Event = Event::InitEvent(&mut init);
-	let _update_event: Event = Event::UpdateEvent(&mut update);
+	let _init_event  : Event = Event::Init(&mut init);
+	let _update_event: Event = Event::Update(&mut update);
 }

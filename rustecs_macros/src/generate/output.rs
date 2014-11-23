@@ -229,11 +229,10 @@ impl EventGenerator {
 		let mut variants: Tokens = Vec::new();
 		for event in events.iter() {
 			let name    = event.name;
-			let variant = event.variant;
 
 			variants.push_all(
 				quote_tokens!(context,
-					$variant(&'r mut $name),
+					$name(&'r mut $name),
 				)
 				.as_slice()
 			);
@@ -303,8 +302,7 @@ impl SystemsGenerator {
 		for event in events.iter() {
 			let mut calls_for_event = Vec::new();
 
-			let name    = event.name;
-			let variant = event.variant;
+			let name = event.name;
 
 			let mut iter = systems
 				.iter()
@@ -319,7 +317,7 @@ impl SystemsGenerator {
 
 			tokens.push_all(
 				quote_tokens!(context,
-					Event::$variant(mut _event) => {
+					Event::$name(mut _event) => {
 						$calls_for_event
 					},
 				)
