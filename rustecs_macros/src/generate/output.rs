@@ -319,7 +319,7 @@ impl SystemsGenerator {
 
 			tokens.push_all(
 				quote_tokens!(context,
-					$variant(mut _event) => {
+					Event::$variant(mut _event) => {
 						$calls_for_event
 					},
 				)
