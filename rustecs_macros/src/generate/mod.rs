@@ -71,7 +71,7 @@ pub fn items(context: &ExtCtxt, world: &parse::World) -> Items {
 
 	let components: Components = world.components
 		.iter()
-		.map(|&component|
+		.map(|component|
 			Component::generate(context, component)
 		)
 		.map(|component|

@@ -1,7 +1,7 @@
 use syntax::ast;
 use syntax::ext::base::ExtCtxt;
 use syntax::parse;
-use syntax::parse::parser::Parser;
+use syntax::parse::parser::{ Parser, PathParsingMode };
 use syntax::parse::token;
 
 
@@ -18,7 +18,7 @@ pub fn parse(context: &ExtCtxt, token_tree: &[ast::TokenTree]) -> World {
 
 #[deriving(Show)]
 pub struct World {
-	pub components    : Vec<ast::Ident>,
+	pub components    : Vec<ast::Path>,
 	pub events        : Vec<ast::Ident>,
 	pub systems       : Vec<System>,
 	pub derived_traits: Vec<ast::Ident>,
@@ -36,7 +36,7 @@ impl World {
 			match declaration.as_str() {
 				"components" => {
 					loop {
-						components.push(parser.parse_ident());
+						components.push(parser.parse_path(PathParsingMode::LifetimeAndTypesWithoutColons).path);
 
 						parser.eat(&token::Comma);
 						if parser.eat(&token::Semi) {

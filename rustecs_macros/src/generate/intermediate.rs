@@ -1,5 +1,6 @@
 use syntax::ast;
 use syntax::ext::base::ExtCtxt;
+use syntax::ext::build::AstBuilder;
 use syntax::parse::token;
 
 use names::{
@@ -34,12 +35,15 @@ pub struct Component {
 }
 
 impl Component {
-	pub fn generate(context: &ExtCtxt, ty: ast::Ident) -> Component {
+	pub fn generate(context: &ExtCtxt, path: &ast::Path) -> Component {
+		let ident = path.segments.last().unwrap().identifier;
+		let ty = context.ty_path(path.clone(), None);
+
 		let var_name = ast::Ident::new(
-			token::intern(camel_to_snake_case(ty).as_slice())
+			token::intern(camel_to_snake_case(ident).as_slice())
 		);
 		let collection = ast::Ident::new(token::intern(
-			type_to_collection_name(ty).as_slice()
+			type_to_collection_name(ident).as_slice()
 		));
 		let builder_name = {
 			let mut builder_name = "with_".to_string();
@@ -95,7 +99,7 @@ impl Component {
 		);
 
 		Component {
-			name    : token::get_ident(ty).to_string(),
+			name    : token::get_ident(ident).to_string(),
 			var_name: var_name,
 
 			insert: insert,
