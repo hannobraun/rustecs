@@ -37,7 +37,7 @@ pub struct Component {
 impl Component {
 	pub fn generate(context: &ExtCtxt, path: &ast::Path) -> Component {
 		let ident = path.segments.last().unwrap().identifier;
-		let ty = context.ty_path(path.clone(), None);
+		let ty = context.ty_path(path.clone());
 
 		let var_name = ast::Ident::new(
 			token::intern(camel_to_snake_case(ident).as_slice())

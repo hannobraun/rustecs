@@ -36,7 +36,7 @@ impl World {
 			match declaration.as_str() {
 				"components" => {
 					loop {
-						components.push(parser.parse_path(PathParsingMode::LifetimeAndTypesWithoutColons).path);
+						components.push(parser.parse_path(PathParsingMode::LifetimeAndTypesWithoutColons));
 
 						parser.eat(&token::Comma);
 						if parser.eat(&token::Semi) {
