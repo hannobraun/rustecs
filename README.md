@@ -53,22 +53,22 @@ declaration, Rustecs generates a lot of useful code for us.
 
 The example is not complete though, since we haven't defined what the components
 actually are. Components are just pieces of data. They can be any of Rust's data
-types.
+types. But they *have* to be declared public to be used with the ```world!``` macro.
 
 The following type definitions complete the example.
 
 ``` Rust
 // Regular struct
-struct Position {
+pub struct Position {
 	x: i16,
 	y: i16,
 }
 
 // Tuple struct
-struct Size(u16);
+pub struct Size(u16);
 
 // Simple type definition
-type Score = u32;
+pub type Score = u32;
 ```
 
 You might ask yourself why we're defining `Score` as `u32` and not just use
@@ -87,8 +87,8 @@ world! {
 }
 
 // Two different component types that are represented by the same Rust type.
-type Score  = u32;
-type Health = u32;
+pub type Score  = u32;
+pub type Health = u32;
 ```
 
 
@@ -184,10 +184,10 @@ world! {
 	components Position, Velocity;
 }
 
-type Position = Vector;
-type Velocity = Vector;
+pub type Position = Vector;
+pub type Velocity = Vector;
 
-struct Vector {
+pub struct Vector {
 	x: i16,
 	y: i16,
 }
@@ -289,12 +289,12 @@ world! {
 	components Position, Player, Enemy;
 }
 
-struct Position(f32, f32);
+pub struct Position(f32, f32);
 
 // Enemy and Player are just markers that indicate to a system how the entity
 // should behave. They contain no data for now.
-struct Player;
-struct Enemy;
+pub struct Player;
+pub struct Enemy;
 ```
 
 Here's our main function for our game. This time, we'll create a `Control`
