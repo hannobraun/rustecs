@@ -9,7 +9,7 @@ use rustecs::EntityContainer;
 
 
 world! {
-	components Position<f64>, Score, state::WeaponState;
+	components Position<f64>, Score, WeaponState;
 }
 
 
@@ -18,18 +18,14 @@ pub struct Position<T>(T, T);
 
 pub type Score = u32;
 
-pub mod state {
-	#[deriving(PartialEq, Show)]
-	pub enum WeaponState {
-		Reloading, Firing, Idle
-	}
+#[deriving(PartialEq, Show)]
+pub enum WeaponState {
+	Reloading, Firing, Idle
 }
 
 
 #[test]
 fn it_should_create_entities() {
-	use state::WeaponState;
-
 	let mut entities = Entities::new();
 
 	assert_eq!(0, entities.positions.len());
