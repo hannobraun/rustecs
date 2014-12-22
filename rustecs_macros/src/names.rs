@@ -11,7 +11,7 @@ pub fn camel_to_snake_case(ident: ast::Ident) -> String {
 			snake_case.push_str("_");
 		}
 
-		snake_case.push(c.to_lowercase().to_char());
+		snake_case.push(c.to_lowercase().as_char());
 	}
 
 	snake_case
