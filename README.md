@@ -1,5 +1,7 @@
 # Rustecs [![Build Status](https://travis-ci.org/hannobraun/rustecs.svg?branch=master)](https://travis-ci.org/hannobraun/rustecs)
 
+Warning: Rustecs is currently not maintained. See [this issue](https://github.com/hannobraun/rustecs/issues/15) for more information.
+
 ## About
 
 Rustecs is an [Entity/Component System](http://entity-systems.wikidot.com/)
